@@ -1,0 +1,96 @@
+<h1>CPPGM Grading Starter Kit</h1>
+
+<h2>Grading Process</h2>
+
+<p>The grading system works by making a clean checkout of your <code>dev.git</code> repository and executing:</p>
+
+<pre><code>$ make
+</code></pre>
+
+<p>This will build the first rule it finds in the <code>Makefile</code>.</p>
+
+<p>It will then look for compiled applications produced in the root directory matching the programming assignment codenames.</p>
+
+<p>For each one it finds, it will copy it out into an external testing environment for further analysis.</p>
+
+<p>The initial commit of your <code>dev.git</code> repository contains a starter <code>Makefile</code> and some stub applications (<code>pptoken</code> and <code>posttoken</code>) and stub classes (<code>ExampleClass1</code>, <code>ExampleClass2</code>).</p>
+
+<h2>Starter Makefile Description</h2>
+
+<p>The starter Makefile is as follows:</p>
+
+<pre><code>apps = \
+        pptoken \
+        posttoken
+</code></pre>
+
+<p>The <code>apps</code> variable contains a list of the applications you wish to build.  Each application <code>x</code> must have an associated <code>x.cpp</code> file that contains a <code>main</code> function.</p>
+
+<pre><code>units = \
+        ExampleClass1 \
+        ExampleClass2
+</code></pre>
+
+<p>The <code>units</code> variable contains a list of the shared cpp files you wish to build.</p>
+
+<pre><code>all: $(apps)
+</code></pre>
+
+<p>The <code>all</code> target is the default target as it appears first in the Makefile.  It depends upon all the applications listed in the apps variable, so they will all be built by this target</p>
+
+<pre><code>CXXFLAGS = -MD -g -O2 -std=gnu++11
+</code></pre>
+
+<p>This is the list of compiler flags that will be passed to gcc when it creates <code>.o</code> files from <code>.cpp</code> files.  The <code>-MD</code> flag will cause gcc to automatically generated <code>.d</code> files that contain extra rules that tell make which <code>.o</code> files depend on which <code>.h</code> files based on their <code>#includes</code>.  <code>-g</code> is to generate debug information for <code>gdb</code>.  <code>-O2</code> is optimization level 2. <code>-std=gnu++11</code> tells GCC to switch on C++11 features.</p>
+
+<pre><code>clean:
+        -rm $(apps) *.o *.d
+</code></pre>
+
+<p>The <code>clean</code> target deletes intermediate files.  You should always do this before you commit.  Intermediate files must <em>never</em> be committed or pushed.</p>
+
+<pre><code>$(apps): %: %.o $(units:=.o)
+        g++ -g -O2 -std=gnu++11 $^ -o $@
+</code></pre>
+
+<p>This is the linking rule for each app.</p>
+
+<pre><code>-include $(units:=.d) $(apps:=.d)
+</code></pre>
+
+<p>This line includes the previously mentioned <code>.d</code> files generated from the <code>-MD</code> flag.</p>
+
+<h2>Adding New Source Files</h2>
+
+<p>To add a new application <code>x</code></p>
+
+<ol>
+<li>Create a new file <code>x.cpp</code> with the application main</li>
+<li>Add <code>x</code> to the <code>apps</code> variable in the Makefile</li>
+</ol>
+
+
+<p>To add a new shared source file <code>y.cpp</code></p>
+
+<ol>
+<li>Create <code>y.cpp</code> and <code>y.h</code></li>
+<li>Add <code>y</code> to the <code>units</code> variable in the Makefile</li>
+</ol>
+
+
+<p>To add a new header file <code>z.h</code></p>
+
+<ol>
+<li>Create and use the header file <code>z.h</code></li>
+<li>No changes to the Makefile are required</li>
+</ol>
+
+
+<h2>Restrictions</h2>
+
+<ul>
+<li>All files you commit to <code>dev.git</code> (apart from provided starter code) must be your own original hand-written work</li>
+<li>Try not to commit superflous files, in particular do not commit any test scripts or test files to <code>dev.git</code>.  The files you commit should be only the ones used in building</li>
+<li>Your build must not depend on any tool/library outside of <code>build-essential</code>, which is essentially <code>make</code>, <code>gcc</code> and <code>libstdc++</code> of the appropriate versions</li>
+</ul>
+

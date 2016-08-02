@@ -1,0 +1,13 @@
+character-literal 4 '\''
+new-line 0 
+string-literal 4 "\""
+new-line 0 
+character-literal 4 '\\'
+whitespace-sequence 0 
+character-literal 4 '\a'
+new-line 0 
+string-literal 4 "\\"
+whitespace-sequence 0 
+string-literal 4 "\a"
+new-line 0 
+eof

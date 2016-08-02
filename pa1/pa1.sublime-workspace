@@ -1,0 +1,663 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"HEAD",
+				"HEADER_NAME_Q"
+			],
+			[
+				"INCLUD",
+				"INCLUDE_WS"
+			],
+			[
+				"INCL",
+				"INCLUDE_WS"
+			],
+			[
+				"INCLU",
+				"INCLUDE_KEYWORD"
+			],
+			[
+				"PRE",
+				"PRE_OP_OR_PUNC_HASH"
+			],
+			[
+				"INC",
+				"INCLUDE_KEYWORD"
+			],
+			[
+				"IN",
+				"INCLUDE_HASH"
+			],
+			[
+				"Ann",
+				"AnnexE1_Allowed_RangesSorted"
+			],
+			[
+				"UCN",
+				"UCN_DECODE_32"
+			],
+			[
+				"UCN_DECODE_",
+				"UCN_DECODE_16"
+			],
+			[
+				"TRI",
+				"TRIGRAPH_DECODE_2"
+			],
+			[
+				"utf",
+				"utf8Value"
+			],
+			[
+				"rf",
+				"rdbuf"
+			],
+			[
+				"RAW",
+				"RAW_STRING_LITERAL"
+			],
+			[
+				"USER",
+				"USER_STRING_LITERAL"
+			],
+			[
+				"STRIN",
+				"STRING_LITERAL_MAYBE_USER"
+			],
+			[
+				"CHAR",
+				"CHAR_LITERAL_MAYBE_USER"
+			],
+			[
+				"pre",
+				"preprocessing_op_or_punc"
+			],
+			[
+				"D",
+				"Digraph_IdentifierLike_Operators"
+			],
+			[
+				"PRE_",
+				"PRE_OP_OR_PUNC_GT_GT"
+			],
+			[
+				"PRE_OP_OR_PUNC_P",
+				"PRE_OP_OR_PUNC_PIPE"
+			],
+			[
+				"PRE_OP_OR_PUNC_",
+				"PRE_OP_OR_PUNC_PIPE"
+			],
+			[
+				"ESC",
+				"ESC_SEQUENCE"
+			],
+			[
+				"Oper",
+				"Operators_Punctuators"
+			],
+			[
+				"emit",
+				"emit_whitespace_sequence"
+			],
+			[
+				"COMM",
+				"COMMENT_MULTILINE_2"
+			],
+			[
+				"NE",
+				"NEXT_STATE"
+			],
+			[
+				"white",
+				"whitespace-sequence"
+			],
+			[
+				"COMMEN",
+				"COMMENT_ONELINE"
+			],
+			[
+				"ES",
+				"ESC_SEQUENCE_UCN_3"
+			],
+			[
+				"Simple",
+				"SimpleEscapeSequence_CodePoints"
+			],
+			[
+				"STR",
+				"STR_OR_CHAR_LITERAL_32"
+			],
+			[
+				"P",
+				"PTOKEN_START"
+			],
+			[
+				"HEADER_NA",
+				"HEADER_NAME_H"
+			],
+			[
+				"mLast",
+				"mLastIdentifier"
+			],
+			[
+				"NUM",
+				"PP_NUMBER_FRAC"
+			],
+			[
+				"PPN",
+				"PP_NUMBER_FRAC"
+			],
+			[
+				"char",
+				"char32_t"
+			],
+			[
+				"PP",
+				"PP_NUMBER"
+			],
+			[
+				"PTOK",
+				"PTOKEN_NONDIGIT"
+			],
+			[
+				"PTO",
+				"PTOKEN_NONDIGIT"
+			],
+			[
+				"trans",
+				"translate"
+			],
+			[
+				"L",
+				"LINE_SPLICE_2"
+			],
+			[
+				"UTF",
+				"UTF8_DECODE"
+			],
+			[
+				"LINE",
+				"LINE_SPLICE_2"
+			],
+			[
+				"UCN_D",
+				"UCN_DECODE_2"
+			],
+			[
+				"Value",
+				"ValueToHexChar"
+			],
+			[
+				"UTF8",
+				"UTF8_DECODE_1"
+			],
+			[
+				"T",
+				"TOKEN_START"
+			],
+			[
+				"TRANS",
+				"TRANS_UTF8_1"
+			],
+			[
+				"TRANs",
+				"TRANS_UTF8_1"
+			],
+			[
+				"TR",
+				"TRANS_UTF8_1"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "pptoken.cpp",
+			"settings":
+			{
+				"buffer_size": 43967,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Makefile",
+			"settings":
+			{
+				"buffer_size": 350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "testcases.t",
+			"settings":
+			{
+				"buffer_size": 26,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/chris/cppgm/pa2/tests/400-raw-string.t",
+			"settings":
+			{
+				"buffer_size": 498,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/chris/cppgm/pa1/Makefile",
+		"/home/chris/cppgm/pa1/testcases.t",
+		"/home/chris/cppgm/pa1/IPPTokenStream.h",
+		"/home/chris/cppgm/pa1/tests/400-angle-colon-madness.my",
+		"/home/chris/cppgm/pa1/tests/400-angle-colon-madness.ref",
+		"/home/chris/cppgm/pa1/tests/400-angle-colon-madness.t",
+		"/home/chris/cppgm/pa1/tests/100-comments.t",
+		"/home/chris/cppgm/pa1/tests/100-comments.my",
+		"/home/chris/cppgm/pa1/pptoken.cpp",
+		"/home/chris/cppgm/pa1/tests/300-ucn-trigraph-ordering.t",
+		"/home/chris/cppgm/pa1/tests/200-trigraphs.t",
+		"/home/chris/cppgm/pa1/tests/200-trigraphs.ref",
+		"/home/chris/cppgm/pa1/tests/200-header-name.t",
+		"/home/chris/cppgm/pa1/tests/200-escape-sequence.t",
+		"/home/chris/cppgm/pa1/tests/100-trigraphs.my",
+		"/home/chris/cppgm/pa1/tests/100-trigraphs.ref",
+		"/home/chris/cppgm/pa1/tests/100-trigraphs.t",
+		"/home/chris/cppgm/pa1/tests/100-preprocessing-op-or-punc.ref",
+		"/home/chris/cppgm/pa1/tests/100-preprocessing-op-or-punc.t",
+		"/home/chris/cppgm/pa1/tests/100-partial-comment.t",
+		"/home/chris/cppgm/pa1/tests/100-example.my",
+		"/home/chris/cppgm/pa1/tests/100-example.ref",
+		"/home/chris/cppgm/pa1/tests/100-example.t",
+		"/home/chris/cppgm/pa1/tests/100-comments.ref",
+		"/home/chris/cppgm/pa1/tests/100-character-literals.t",
+		"/home/chris/cppgm/pa1/tests/100-character-literals.ref",
+		"/home/chris/cppgm/pa1/tests/100-character-literals.my",
+		"/home/chris/cppgm/pa1/tests/100-universal-character-name.t",
+		"/home/chris/cppgm/pa1/tests/100-floating.t",
+		"/home/chris/cppgm/pa1/tests/100-floating.ref",
+		"/home/chris/cppgm/pa1/tests/100-a.ref",
+		"/home/chris/cppgm/pa1/tests/100-a.my",
+		"/home/chris/cppgm/pa1/test.c",
+		"/home/chris/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/chris/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
+		"/home/chris/msg.txt",
+		"/home/chris/msg2.txt"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"mTranslate = true",
+			"ESC_SEQUENCE",
+			"IS_IDNONDIGIT",
+			"ESC_SEQUENCE",
+			"CALL_STATE",
+			"mTransState",
+			"mTranslate",
+			"CHAR_LITERAL_MAY",
+			"@todo",
+			"emit_whitespace",
+			"mCpStream",
+			"mLastToken",
+			"RESET_STATE",
+			"c = ",
+			"mCpStream",
+			"RAW_STRING_LITERAL_GO",
+			"RAW_STRING_LITERAL",
+			"STRING_LITERAL",
+			"preprocessing-op-or-punc",
+			"BACK_STATE",
+			"mMaybe",
+			"STR_OR_CHAR_LITERAL",
+			"IS_NONDIGIT",
+			"append(",
+			"(char32_t)",
+			"UCN_ENCODE",
+			"mCpStream",
+			"mState",
+			"append",
+			"UCN_CONV",
+			"mCodepoint",
+			"TRANS_UTF8",
+			"TS_LINEFEED"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"RAW_STRING_LITERAL_GO",
+			"preprocessing_op_or_punc",
+			"SET_STATE",
+			"push_back(",
+			"(const char32_t)",
+			"UCN_DECODE",
+			"UCN_ENCODE",
+			"cp",
+			"UTF8_DECODE",
+			"TS_NEWLINE"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "pptoken.cpp",
+					"settings":
+					{
+						"buffer_size": 43967,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								26643,
+								26643
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 15424.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Makefile",
+					"settings":
+					{
+						"buffer_size": 350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "testcases.t",
+					"settings":
+					{
+						"buffer_size": 26,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								26,
+								26
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Perl/Perl.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/chris/cppgm/pa2/tests/400-raw-string.t",
+					"settings":
+					{
+						"buffer_size": 498,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								63,
+								63
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Perl/Perl.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.clang":
+	{
+		"height": 118.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"testcas",
+				"testcases.t"
+			],
+			[
+				"makefil",
+				"Makefile"
+			],
+			[
+				"100-comm",
+				"tests/100-comments.my"
+			],
+			[
+				"400-ang",
+				"tests/400-angle-colon-madness.my"
+			],
+			[
+				"400-",
+				"tests/400-angle-colon-madness.ref"
+			],
+			[
+				"200-tri",
+				"tests/200-trigraphs.t"
+			],
+			[
+				"300-ucn",
+				"tests/300-ucn-trigraph-ordering.t"
+			],
+			[
+				"200-head",
+				"tests/200-header-name.t"
+			],
+			[
+				"200-escap",
+				"tests/200-escape-sequence.t"
+			],
+			[
+				"100-tri",
+				"tests/100-trigraphs.my"
+			],
+			[
+				"100-trig",
+				"tests/100-trigraphs.t"
+			],
+			[
+				"100-pre",
+				"tests/100-preprocessing-op-or-punc.ref"
+			],
+			[
+				"100-partial",
+				"tests/100-partial-comment.t"
+			],
+			[
+				"100-exam",
+				"tests/100-example.my"
+			],
+			[
+				"100-ex",
+				"tests/100-example.ref"
+			],
+			[
+				"100-com",
+				"tests/100-comments.t"
+			],
+			[
+				"100-char",
+				"tests/100-character-literals.ref"
+			],
+			[
+				"100-charac",
+				"tests/100-character-literals.t"
+			],
+			[
+				"100-a.my",
+				"tests/100-a.my"
+			],
+			[
+				"100-a.ref",
+				"tests/100-a.ref"
+			],
+			[
+				"100-fla",
+				"tests/100-floating.ref"
+			],
+			[
+				"100-flo",
+				"tests/100-floating.t"
+			],
+			[
+				"100-univ",
+				"tests/100-universal-character-name.t"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"pa2",
+				"/home/chris/cppgm/pa2/pa2.sublime-project"
+			],
+			[
+				"",
+				"/home/chris/cppgm/pa2/pa2.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 239.0,
+	"status_bar_visible": true
+}

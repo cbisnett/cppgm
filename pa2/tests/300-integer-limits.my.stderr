@@ -1,0 +1,108 @@
+ERROR: Invalid integer literal suffix: 2147483647l_ud1
+ERROR: Invalid integer literal suffix: 2147483647L_ud1
+ERROR: Invalid integer literal suffix: 2147483647ll_ud1
+ERROR: Invalid integer literal suffix: 2147483647LL_ud1
+ERROR: Invalid integer literal suffix: 2147483646l_ud1
+ERROR: Invalid integer literal suffix: 2147483646L_ud1
+ERROR: Invalid integer literal suffix: 2147483646ll_ud1
+ERROR: Invalid integer literal suffix: 2147483646LL_ud1
+ERROR: Invalid integer literal suffix: 2147483648l_ud1
+ERROR: Invalid integer literal suffix: 2147483648L_ud1
+ERROR: Invalid integer literal suffix: 2147483648ll_ud1
+ERROR: Invalid integer literal suffix: 2147483648LL_ud1
+ERROR: Invalid integer literal suffix: 4294967295l_ud1
+ERROR: Invalid integer literal suffix: 4294967295L_ud1
+ERROR: Invalid integer literal suffix: 4294967295ll_ud1
+ERROR: Invalid integer literal suffix: 4294967295LL_ud1
+ERROR: Invalid integer literal suffix: 4294967294l_ud1
+ERROR: Invalid integer literal suffix: 4294967294L_ud1
+ERROR: Invalid integer literal suffix: 4294967294ll_ud1
+ERROR: Invalid integer literal suffix: 4294967294LL_ud1
+ERROR: Invalid integer literal suffix: 4294967296l_ud1
+ERROR: Invalid integer literal suffix: 4294967296L_ud1
+ERROR: Invalid integer literal suffix: 4294967296ll_ud1
+ERROR: Invalid integer literal suffix: 4294967296LL_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775807l_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775807L_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775807ll_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775807LL_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775806l_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775806L_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775806ll_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775806LL_ud1
+ERROR: decimal integer literal out of range: 9223372036854775808
+ERROR: decimal integer literal out of range: 9223372036854775808
+ERROR: decimal integer literal out of range: 9223372036854775808l
+ERROR: decimal integer literal out of range: 9223372036854775808l
+ERROR: decimal integer literal out of range: 9223372036854775808L
+ERROR: decimal integer literal out of range: 9223372036854775808L
+ERROR: decimal integer literal out of range: 9223372036854775808ll
+ERROR: decimal integer literal out of range: 9223372036854775808ll
+ERROR: decimal integer literal out of range: 9223372036854775808LL
+ERROR: decimal integer literal out of range: 9223372036854775808LL
+ERROR: Invalid integer literal suffix: 9223372036854775808l_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775808L_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775808ll_ud1
+ERROR: Invalid integer literal suffix: 9223372036854775808LL_ud1
+ERROR: decimal integer literal out of range: 18446744073709551615
+ERROR: decimal integer literal out of range: 18446744073709551615
+ERROR: decimal integer literal out of range: 18446744073709551615l
+ERROR: decimal integer literal out of range: 18446744073709551615l
+ERROR: decimal integer literal out of range: 18446744073709551615L
+ERROR: decimal integer literal out of range: 18446744073709551615L
+ERROR: decimal integer literal out of range: 18446744073709551615ll
+ERROR: decimal integer literal out of range: 18446744073709551615ll
+ERROR: decimal integer literal out of range: 18446744073709551615LL
+ERROR: decimal integer literal out of range: 18446744073709551615LL
+ERROR: Invalid integer literal suffix: 18446744073709551615l_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551615L_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551615ll_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551615LL_ud1
+ERROR: decimal integer literal out of range: 18446744073709551614
+ERROR: decimal integer literal out of range: 18446744073709551614
+ERROR: decimal integer literal out of range: 18446744073709551614l
+ERROR: decimal integer literal out of range: 18446744073709551614l
+ERROR: decimal integer literal out of range: 18446744073709551614L
+ERROR: decimal integer literal out of range: 18446744073709551614L
+ERROR: decimal integer literal out of range: 18446744073709551614ll
+ERROR: decimal integer literal out of range: 18446744073709551614ll
+ERROR: decimal integer literal out of range: 18446744073709551614LL
+ERROR: decimal integer literal out of range: 18446744073709551614LL
+ERROR: Invalid integer literal suffix: 18446744073709551614l_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551614L_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551614ll_ud1
+ERROR: Invalid integer literal suffix: 18446744073709551614LL_ud1
+ERROR: decimal integer literal out of range: 18446744073709551616
+ERROR: decimal integer literal out of range: 18446744073709551616
+ERROR: decimal integer literal out of range: 18446744073709551616l
+ERROR: decimal integer literal out of range: 18446744073709551616l
+ERROR: decimal integer literal out of range: 18446744073709551616L
+ERROR: decimal integer literal out of range: 18446744073709551616L
+ERROR: decimal integer literal out of range: 18446744073709551616ll
+ERROR: decimal integer literal out of range: 18446744073709551616ll
+ERROR: decimal integer literal out of range: 18446744073709551616LL
+ERROR: decimal integer literal out of range: 18446744073709551616LL
+ERROR: decimal integer literal out of range: 18446744073709551616u
+ERROR: decimal integer literal out of range: 18446744073709551616u
+ERROR: decimal integer literal out of range: 18446744073709551616ul
+ERROR: decimal integer literal out of range: 18446744073709551616lu
+ERROR: decimal integer literal out of range: 18446744073709551616uL
+ERROR: decimal integer literal out of range: 18446744073709551616Lu
+ERROR: decimal integer literal out of range: 18446744073709551616ull
+ERROR: decimal integer literal out of range: 18446744073709551616llu
+ERROR: decimal integer literal out of range: 18446744073709551616uLL
+ERROR: decimal integer literal out of range: 18446744073709551616LLu
+ERROR: decimal integer literal out of range: 18446744073709551616U
+ERROR: decimal integer literal out of range: 18446744073709551616U
+ERROR: decimal integer literal out of range: 18446744073709551616Ul
+ERROR: decimal integer literal out of range: 18446744073709551616lU
+ERROR: decimal integer literal out of range: 18446744073709551616UL
+ERROR: decimal integer literal out of range: 18446744073709551616LU
+ERROR: decimal integer literal out of range: 18446744073709551616Ull
+ERROR: decimal integer literal out of range: 18446744073709551616llU
+ERROR: decimal integer literal out of range: 18446744073709551616ULL
+ERROR: decimal integer literal out of range: 18446744073709551616LLU
+ERROR: decimal integer literal out of range: 18446744073709551616l_ud1
+ERROR: decimal integer literal out of range: 18446744073709551616L_ud1
+ERROR: decimal integer literal out of range: 18446744073709551616ll_ud1
+ERROR: decimal integer literal out of range: 18446744073709551616LL_ud1

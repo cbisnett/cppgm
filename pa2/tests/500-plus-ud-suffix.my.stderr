@@ -1,0 +1,3 @@
+ERROR: Invalid integer literal suffix: 1_e+
+ERROR: Invalid integer literal suffix: 1_e+1
+ERROR: invalid float literal suffix: 1.0_e+1

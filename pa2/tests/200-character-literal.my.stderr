@@ -1,0 +1,4 @@
+ERROR: UTF-16 character literal out of range: u'𝄞'
+ERROR: UTF-16 character literal out of range: u'𝄞'
+ERROR: UTF-16 character literal out of range: u'\x1D11E'
+ERROR: multicharacter literals are not supported: 'abc'
