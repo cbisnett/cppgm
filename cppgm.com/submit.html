@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>Submitting Your Solutions</h2>
+
+<h3>Step 1</h3>
+
+<p>Clone your private repository from:</p>
+
+<pre><code>$ git clone &lt;username&gt;@dev.cppgm.org:dev.git
+</code></pre>
+
+<p>Where <code>&lt;username&gt;</code> is your assigned username.</p>
+
+<p>For example if your username is <code>fred</code>:</p>
+
+<pre><code>$ git clone fred@dev.cppgm.org:dev.git
+</code></pre>
+
+<h3>Step 2</h3>
+
+<p>Read the contained README.md and study the skeleton code.</p>
+
+<h3>Step 3</h3>
+
+<p>Commit your sources as instructed and then:</p>
+
+<pre><code>$ git push
+</code></pre>
+
+<p>to submit them to the server.</p>
+
+<h3>Step 4</h3>
+
+<p>The server will build and test your submission and should mail you a build log within a few minutes.</p>
+
+<p>The last line of the build log should contain:</p>
+
+<pre><code>RESULT: PASSED BASIC TESTING PA1 to PA&lt;n&gt;
+</code></pre>
+
+<p>where <code>&lt;n&gt;</code> is the highest programming assignment you have completed.</p>
+
+<p>You must only submit complete and tested solutions.  If any of the solutions fail, it will break your entire build.  If this happens please correct the problem immediately and resubmit.</p>
+
+<p>As you complete assignments continue to push your codebase to this private repository.  At the deadline for <code>PA&lt;n&gt;</code>, where <code>n &gt;= 2</code>, your build log must read <code>RESULT: PASSED BASIC TESTING PA1 to PA&lt;m&gt;</code> where <code>m &gt;= n</code>.</p>
+
+<h3>Troubleshooting</h3>
+
+<p>Sometimes you may not receive a mail straight away after you push.  This could be because the build queue is on hold, or it could be because we cannot reach your mail server.</p>
+
+<p>If you don't receive a mail you can get your latest log at the URL:</p>
+
+<pre><code>http://dev.cppgm.org/&lt;username&gt;.log
+</code></pre>
+
+<p>For example if your username is <code>fred</code> your log is at:</p>
+
+<pre><code>http://dev.cppgm.org/fred.log
+</code></pre>
+
+<p>Check the timestamp and git commit hash at the top of the log to determine whether it is a mail problem, or the queue is on hold.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

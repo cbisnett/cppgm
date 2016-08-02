@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Reading Assignment C (stdlib)</h2>
+
+<h3>Overview</h3>
+
+<p>After reading this assignment description, read the Assigned Reading Material enumerated below.</p>
+
+<p>After this assignment you will be aware of the required content and interface of a C++ standard library.  You will use this knowledge to develop your implementation of it.</p>
+
+<h3>Standard Library Overview</h3>
+
+<p>During translation phase 4, when a C++ source file contains one of the following 105 preprocessing directives:</p>
+
+<pre><code>#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;assert.h&gt;
+#include &lt;atomic&gt;
+#include &lt;bitset&gt;
+#include &lt;cassert&gt;
+#include &lt;ccomplex&gt;
+#include &lt;cctype&gt;
+#include &lt;cerrno&gt;
+#include &lt;cfenv&gt;
+#include &lt;cfloat&gt;
+#include &lt;chrono&gt;
+#include &lt;cinttypes&gt;
+#include &lt;ciso646&gt;
+#include &lt;climits&gt;
+#include &lt;clocale&gt;
+#include &lt;cmath&gt;
+#include &lt;codecvt&gt;
+#include &lt;complex&gt;
+#include &lt;complex.h&gt;
+#include &lt;condition_variable&gt;
+#include &lt;csetjmp&gt;
+#include &lt;csignal&gt;
+#include &lt;cstdalign&gt;
+#include &lt;cstdarg&gt;
+#include &lt;cstdbool&gt;
+#include &lt;cstddef&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstdlib&gt;
+#include &lt;cstring&gt;
+#include &lt;ctgmath&gt;
+#include &lt;ctime&gt;
+#include &lt;ctype.h&gt;
+#include &lt;cuchar&gt;
+#include &lt;cwchar&gt;
+#include &lt;cwctype&gt;
+#include &lt;deque&gt;
+#include &lt;errno.h&gt;
+#include &lt;exception&gt;
+#include &lt;fenv.h&gt;
+#include &lt;float.h&gt;
+#include &lt;forward_list&gt;
+#include &lt;fstream&gt;
+#include &lt;functional&gt;
+#include &lt;future&gt;
+#include &lt;initializer_list&gt;
+#include &lt;inttypes.h&gt;
+#include &lt;iomanip&gt;
+#include &lt;ios&gt;
+#include &lt;iosfwd&gt;
+#include &lt;iostream&gt;
+#include &lt;iso646.h&gt;
+#include &lt;istream&gt;
+#include &lt;iterator&gt;
+#include &lt;limits&gt;
+#include &lt;limits.h&gt;
+#include &lt;list&gt;
+#include &lt;locale&gt;
+#include &lt;locale.h&gt;
+#include &lt;map&gt;
+#include &lt;math.h&gt;
+#include &lt;memory&gt;
+#include &lt;mutex&gt;
+#include &lt;new&gt;
+#include &lt;numeric&gt;
+#include &lt;ostream&gt;
+#include &lt;queue&gt;
+#include &lt;random&gt;
+#include &lt;ratio&gt;
+#include &lt;regex&gt;
+#include &lt;scoped_allocator&gt;
+#include &lt;set&gt;
+#include &lt;setjmp.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;sstream&gt;
+#include &lt;stack&gt;
+#include &lt;stdalign.h&gt;
+#include &lt;stdarg.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;stdexcept&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;streambuf&gt;
+#include &lt;string&gt;
+#include &lt;string.h&gt;
+#include &lt;strstream&gt;
+#include &lt;system_error&gt;
+#include &lt;tgmath.h&gt;
+#include &lt;thread&gt;
+#include &lt;time.h&gt;
+#include &lt;tuple&gt;
+#include &lt;typeindex&gt;
+#include &lt;typeinfo&gt;
+#include &lt;type_traits&gt;
+#include &lt;uchar.h&gt;
+#include &lt;unordered_map&gt;
+#include &lt;unordered_set&gt;
+#include &lt;utility&gt;
+#include &lt;valarray&gt;
+#include &lt;vector&gt;
+#include &lt;wchar.h&gt;
+#include &lt;wctype.h&gt;
+</code></pre>
+
+<p>...then your implementation shall introduce declaration of certain macros and entities into the translation unit, and enable certain language features.  Any necessary definitions of entities so included must also be provided by your implementation and, as appropriate, either provided inline or linked separately into the final output program.  Collectively these facilities are called the standard library.</p>
+
+<h4>Instructor Notes (optional)</h4>
+
+<p>To implement the standard library for the course, it is recommended to write 105 normal header files of the given names, and a set of associated .cpp files.  These files are then checked in with your sources, and as part of your implementation build process these files should then be processed by a small prebuild tool you write into raw strings and then compiled and linked along with your implementation source files to be translated into your implementation program.  Then, when your implementation translates programs, during translation phase 4, you can filter #include directives for these header file names, and include the text of the header from the compiled-in raw string rather than accessing the file system.  When a header file is so included, the necessary associated cpp(s) can then be marked as used also.  The cpp(s) can then be compiled from their raw strings as well, as if they were specified as additional translation units on the command-line.  This will mean your standard library is builtin (as source text) in your final implementation, and your implementation will be a single monolithic native linux application.</p>
+
+<p>Keep in mind that these header files and cpp files never need to be compiled with the bootstrap implementation, only by your implementation, so you shouldn't concern yourself necessarily with worrying about how, for example, gcc interfaces with libstdc++, or whether your standard library implementation is gcc-compatible.  Your implementation (as a whole) is only required to be standard-compliant.  You can use whatever internal interface between your compiler and standard library that you like.</p>
+
+<h3>Assigned Reading Material</h3>
+
+<p>The assigned reading material is a subset of the following three documents:</p>
+
+<ul>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">WG14 N1256.pdf</a></li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1326.pdf">WG14 N1326.pdf</a></li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3485.pdf">WG21 N3485.pdf</a></li>
+</ul>
+
+<p>It includes in total 1032 pages in the following five sections:</p>
+
+<ul>
+<li>WG14 N1256 Annex B Library Summary (C) - 18 pages</li>
+<li>WG14 N1256 Clause 7 Library (C) - 239 pages</li>
+<li>WG14 N1326 - 4 pages</li>
+<li>WG21 N3485 Annex C.3 C Standard Library (C -> C++ delta) - 4 pages</li>
+<li>WG21 N3485 Clause 17 to 30 (inclusive) - 767 pages</li>
+</ul>
+
+<h4>Reading Blocks</h4>
+
+<p>We have arranged the reading material into 15 blocks of approximately 70 pages each.  If you schedule a 90 minute reading session per day, with two sessions per block - then you should complete one pass in 1 month.  The material is somewhat easier to comprehend then the core language specification so one pass should be sufficient.</p>
+
+<pre><code>Block 1: 58 pages
+    WG14 N1256 Annex B Library Summary
+    WG14 N1256 7.1 Introduction
+    WG14 N1256 7.2 Diagnostics &lt;assert.h&gt;
+    WG14 N1256 7.3 Complex Arithmetic &lt;complex.h&gt;
+    WG14 N1256 7.4 Character Handling &lt;ctype.h&gt;
+    WG14 N1256 7.5 Errors &lt;errno.h&gt;
+    WG14 N1256 7.6 Floating-point environment &lt;fenv.h&gt;
+    WG14 N1256 7.7 Characteristics of floating types &lt;float.h&gt;
+    WG14 N1256 7.8 Format conversion of integer types &lt;inttypes.h&gt;
+    WG14 N1256 7.9 Alternative Spellings &lt;iso646.h&gt;
+    WG14 N1256 7.10 Size of integer types &lt;limits.h&gt;
+
+Block 2: 58 pages
+    WG14 N1256 7.11 Localization &lt;local.h&gt;
+    WG14 N1256 7.12 Mathematics &lt;math.h&gt;
+    WG14 N1256 7.13 Nonlocal Jumps &lt;setjmp.h&gt;
+    WG14 N1256 7.14 Signal handling &lt;signal.h&gt;
+    WG14 N1256 7.15 Variable Arguments &lt;stdarg.h&gt;
+    WG14 N1256 7.16 Boolean type and values &lt;stdbool.h&gt;
+    WG14 N1256 7.17 Common definitions &lt;stddef.h&gt;
+    WG14 N1256 7.18 Integer types &lt;stdint.h&gt;
+
+Block 3: 63 pages
+    WG14 N1256 7.19 Input/output &lt;stdio.h&gt;
+    WG14 N1256 7.20 General utilities &lt;stdlib.h&gt;
+
+Block 4: 78 pages
+    WG14 N1256 7.21 String handling &lt;string.h&gt;
+    WG14 N1256 7.22 Type-generic math &lt;tgmath.h&gt;
+    WG14 N1256 7.23 Date and time &lt;time.h&gt;
+    WG14 N1256 7.24 Extended multibyte and wide char &lt;wchar.h&gt;
+    WG14 N1256 7.25 Wide char class. and mapping &lt;wctype.h&gt;
+    WG14 N1256 7.26 Future library directions
+
+Block 5: 61 pages
+    WG14 N1326 (4 pages)
+    WG21 N3485 Annex C.3 C standard library (page 1202-1205)
+    WG21 N3485 Clause 17 Library introduction
+    WG21 N3485 Clause 18 Language support library
+
+Block 6: 49 pages
+    WG21 N3485 Clause 19 Diagnostics library
+    WG21 N3485 Clause 20 General utilities library
+
+Block 7: 44 pages
+    WG21 N3485 Clause 21 Strings library
+
+Block 8: 57 pages
+    WG21 N3485 Clause 22 Localization library
+
+Block 9: 59 pages
+    WG21 N3485 Clause 23.1 Containers library / General
+    WG21 N3485 Clause 23.2 Container requirements
+    WG21 N3485 Clause 23.3 Sequence containers
+
+Block 10: 41 pages
+    WG21 N3485 Clause 23.4 Associative containers
+    WG21 N3485 Clause 23.5 Unordered associative containers
+    WG21 N3485 Clause 23.6 Container adapters
+
+Block 11: 71 pages
+    WG21 N3485 Clause 24 Iterators library
+    WG21 N3485 Clause 25 Algorithms library
+
+Block 12: 86 pages 
+    WG21 N3485 Clause 26 Numerics library
+
+Block 13: 88 pages
+    WG21 N3485 Clause 27 Input/output library
+
+Block 14: 48 pages
+    WG21 N3485 Clause 28 Regular expressions library
+
+Block 15: 65 pages
+    WG21 N3485 Atomic operations library
+    WG21 N3485 Thread support library
+</code></pre>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

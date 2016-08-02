@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 8 (nsinit)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>nsinit</code> that takes as input a set of C++ Source Files, executes all phases of translation, and outputs a mock program image in the format described below.</p>
+
+<p>The behaviour of <code>nsinit</code> is undefined if a translation unit does not match pa8.gram.</p>
+
+<p>Note that unlike PA7, behaviour is now defined for diagnostic-required ill-formed programs that match the assignment grammar.</p>
+
+<p>Also note, there is no machine code generation required for the mock program image, variables are output in their zero-initialized or constant-initialized state, and functions are output as fixed stubs.</p>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Programming Assignment 7 before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa8.git
+</code></pre>
+
+<p>It contains:</p>
+
+<ul>
+<li>a stub implementation of <code>nsinit</code></li>
+<li>a compiled reference implementation <code>nsinit-ref</code></li>
+<li>a wrapper for a production C++ compiler called <code>nsinit-other</code> that serves as a secondary partial reference implementation.  (to use it you will need to modify the command)</li>
+<li>a test suite.</li>
+<li>a stdin/stdout wrapper for <code>nsinit-ref</code> called <code>nsinit-ref-stdin</code>, that passes the output program image through <code>xxd</code>.</li>
+<li>a stdin/stdout wrapper for <code>nsinit-other</code> called <code>nsinit-other-stdin</code>, that passed the output program image through <code>objdump</code>.</li>
+<li>the grammar for this assignment called <code>pa8.gram</code></li>
+<li>a html grammar explorer of <code>pa8.gram</code> in the sub-directory <code>grammar/</code></li>
+</ul>
+
+<p>You will want to extend your PA7 solution to complete this assignment.</p>
+
+<h4>Test Format Changes</h4>
+
+<p>In this assignment there are test cases with multiple translation units.  To accomodate this, each test case now consists of one <em>or more</em> input source files:</p>
+
+<pre><code>NNN-testname.t.1
+NNN-testname.t.2
+...
+NNN-testname.t.&lt;n&gt;
+</code></pre>
+
+<p>The output files:</p>
+
+<pre><code>NNN-testname.ref
+NNN-testname.ref.stdout
+NNN-testname.ref.exit_status
+</code></pre>
+
+<p>remain the same, however note the outfile for PA8 is of binary format, so you will want to look at it in hex (with, for example, <code>xxd</code> or <code>ghex</code>)</p>
+
+<h4><code>nsinit-other</code></h4>
+
+<p>Additional to the normal <code>.ref.*</code> output files, there are output files:</p>
+
+<pre><code>NNN-testname.other.stdout
+NNN-testname.other.exit_status
+</code></pre>
+
+<p>which are generated with <code>nsinit-other</code>.  <em>These are not used in automated testing of <code>nsinit</code>.</em>  For ill-formed test cases the error message in <code>.other.stdout</code> may be superior to the reference implementations.  The <code>.other.exit_status</code> is mainly for internal use to help test the reference implementation during development against a production compiler.</p>
+
+<p>Note that the output of <code>nsinit-other</code> is a real ELF program image, and so not the same as the PA8 Mock Program Image.  To save space it is deleted during generation of the <code>.other.*</code> output.</p>
+
+<p>The <code>.ref.*</code> and <code>.other.*</code> can be regenerated with the <code>make ref-test</code> target.  To use it you will need to modify <code>nsinit-other</code> to wrap the production toolchain you wish to use as <code>other</code>.</p>
+
+<h3>Input / Command-Line Arguments</h3>
+
+<p>The same as PA7 <code>nsdecl</code>.  Behaviour is undefined unless the command-line arguments match:</p>
+
+<pre><code>$ nsinit -o &lt;outfile&gt; &lt;srcfile1&gt; &lt;srcfile2&gt; ... &lt;srcfileN&gt;
+</code></pre>
+
+<p>with the same relaxations as PA7</p>
+
+<h3>Output Format</h3>
+
+<p><code>nsinit</code> shall write a binary image to <outfile> in the PA8 Mock Program Image format described below.</p>
+
+<h3>PA8 Mock Program Image</h3>
+
+<p>The magic first four bytes shall be the <code>array of 4 char</code> string literal "PA8".</p>
+
+<p>The following entities shall be appended:</p>
+
+<ul>
+<li>variables of static or thread storage duration</li>
+<li>temporary objects bound to references</li>
+<li>mock function stubs</li>
+<li>string literals</li>
+</ul>
+
+<p>In the following order:</p>
+
+<p><em>BLOCK 1</em>: Variables and functions shall then be appended in order of first declaration within the program, where the translation units are processed in the same order as given on the command-line.</p>
+
+<p><em>BLOCK 2</em>: Lifetime-extended temporaries bound to references shall then be appended in order of their first use within the program, with command-line translation unit order.</p>
+
+<p><em>BLOCK 3</em>: String Literals shall then be appened in order of their tokens within the program, with command-line translation unit order.</p>
+
+<h4>Variables/Functions</h4>
+
+<p>Each defined named variable and declared function shall be appended to the output image, regardless of whether it have static or thread local storage duration (automatic and dynamic storage duration are not available in PA8).  Recall from the ABI that fundamental types all have an alignment equal to their size.  Zero padding should be used to place the object at the next properly aligned offset within the file.</p>
+
+<p>The size and alignment of the complete fundamental types are:</p>
+
+<pre><code>signed char             1
+short int               2
+int                     4
+long int                8
+long long int           8
+unsigned char           1
+unsigned short int      2
+unsigned int            4
+unsigned long int       8
+unsigned long long int  8
+wchar_t                 4
+char                    1
+char16_t                2
+char32_t                4
+bool                    1
+float                   4
+double                  8
+long double            16
+nullptr_t               8
+</code></pre>
+
+<p><code>void</code> is an incomplete type, and so does not have a size or alignment.</p>
+
+<p><code>nullptr_t</code> is an unnamed fundamental type.  There is no <code>nullptr_t</code> keyword.  It is the type of the expression <code>nullptr</code>.  There is no way to declare it in PA8.  In a later assignment you will be able to access the type by using <code>decltype(nullptr)</code>, when you implement <code>decltype</code>.  When you implement your standard library you will create a type called <code>std::nullptr_t</code> as follows:</p>
+
+<pre><code>namespace std
+{
+    using nullptr_t = decltype(nullptr);
+}
+</code></pre>
+
+<p>This is how the <code>std::nullptr_t</code> name is created.</p>
+
+<p>The types <code>const T</code>, <code>volatile T</code> and <code>const volatile T</code> all have the same size and alignment as <code>T</code>.</p>
+
+<p>The type <code>pointer to T</code> has a size and alignment of 8 bytes.  Pointers shall be represented using an unsigned 64-bit little-endian value that is an offset within the image file.  That is, for the mock program image, it shall be as if the entire image file (including magic four bytes) is loaded into memory starting at memory address 0.</p>
+
+<p><code>std::size_t</code> has the same size, alignment and representation as <code>unsigned long int</code>, 8 and 8.</p>
+
+<p>The type <code>reference to T</code> (both lvalue and rvalue versions) shall be implemented using a <code>pointer to T</code> representation.  The pointer shall point to the referenced entity.</p>
+
+<p>An <code>array of unknown bound</code> is an incomplete type, and so does not have a size or alignment.</p>
+
+<p>An <code>array of N T</code> has a size of <code>N*sizeof(T)</code>, and an alignment of <code>alignof(T)</code>.</p>
+
+<p>A <code>function of XXX</code> has a mock size of 4 and a mock alignment of 4, and a mock representation same the <code>array of 4 char</code> "fun".  (Later on in the real program image functions will consist of x86-64 machine code of variable length.)</p>
+
+<h3>Error Handling</h3>
+
+<p>If the program is ill-formed, but syntactically correct according to pa8.gram, <code>nsinit</code> shall <code>EXIT_FAILURE</code>.</p>
+
+<p>If the program is not syntactically correct according to pa8.gram, behaviour is undefined.</p>
+
+<h3>Standard Output / Error</h3>
+
+<p>Standard output and standard error are ignored for <code>nsinit</code>.  You are free to use them as you want.  It is suggested that you may output error messages to stderr, and output helpful debug information to stdout.  The reference implementation outputs some undocumented linking information that may give some helpful clues as to what it is doing internally, it is however not recommended to try and mimic it.</p>
+
+<h3>Features</h3>
+
+<h4>Expressions</h4>
+
+<p>Expressions have been extended to include non-user-defined literals (including true, false, nullptr), id-expressions, and parenthesized expressions thereof:</p>
+
+<pre><code>expression:
+    KW_TRUE
+    KW_FALSE
+    KW_NULLPTR
+    TT_LITERAL
+    OP_LPAREN expression OP_RPAREN
+    id-expression
+
+constant-expression:
+    expression
+</code></pre>
+
+<h4>Initialization</h4>
+
+<p>Expressions may now be used in the following contexts:</p>
+
+<ul>
+<li>simple declaration initializers</li>
+<li>static_assert declarations        </li>
+<li>array bounds</li>
+</ul>
+
+<p>The semantics of initialization are described in 8.5.  In the full grammar initialization takes place in more than just these three places.  To implement initialization you will also have to implement many of the Standard Conversions, clause 4.  This will also entail annotating value categories of expressions (3.10).</p>
+
+<p>You will also need to determine during translation if an expression is a constant expression, and if it is, evaluate it.  This is described in 5.19.</p>
+
+<h4>Specifiers</h4>
+
+<p>The specifiers <code>static</code>, <code>thread_local</code>, <code>extern</code>, <code>typedef</code>, <code>constexpr</code>, <code>inline</code> as well as the cv-qualifiers and simple type specifiers are all in effect and should be semantically checked, analyzed and result in correct behaviour.</p>
+
+<h4>Functions</h4>
+
+<p>The grammar now includes a function definition that may only have an empty body.  The presence of the body distinguishes a function declaration from a function definition.  The semantics of function definitions and their relationship to ODR and linking should be applied appropriately.  This will include distinguishing two functions of the same name based on their signature as described in 3.5.</p>
+
+<h4>Declarations</h4>
+
+<p>As per PA7 you will continue to support namespace definitions, simple declarations, namespace alias definitions, using declarations, using directives and alias declarations.</p>
+
+<p>Added in PA8 are initializers for simple declarations, function definitions with empty bodies and <code>static_assert</code> declarations.</p>
+
+<p>You are also expected to handle the correct scope change for a name lookup that occurs in a declaration after a qualified declarator-id (3.4.3p3 is now required).</p>
+
+<h3>Standard Revision</h3>
+
+<p>You will want to carefully review:</p>
+
+<pre><code>3.2 One definition rule
+3.5 Program and linkage
+3.6.2 Initialization of non-local variables
+3.10 Lvalues and rvalues
+4.x Standard Conversions
+7.1.1 Storage Class Specifiers
+7.1.5 Constexpr Specifier
+8.5.0 Initializers
+8.5.2 Initializers / Character arrays
+8.5.3 Initializers / References
+</code></pre>
+
+<p>However other parts of the standard will come into play as well.  Reading these sections alone is not a substitute for completing RAA.</p>
+
+<h3>Design Notes (Optional)</h3>
+
+<p>Start by reviewing chapter 5 and 6 of the dragon book to get some background theory.</p>
+
+<p>In general when annotating a full expression you will start from the top, work your way to the leaves, and then back up to the top.  For this assignment an expression consists of only one of two possible things, literals or id-expressions - neither of which have sub-expressions - so this is relatively straightforward for now.  Start by analyzing the expression and determining its natural type and value category.  In this assignment this information can always be obtained for an expression, irrespective of its context.  In the full grammar there are a few exceptions to this which need top-down information, but not for this assignment.  Once the expressions natural type and value category have been determined, based on the context the expression is in, further implicit conversions or other transformations will take place.</p>
+
+<p>The natural value category of a literal is prvalue, except for string literals which are lvalues.  The type and value of most literals can be determined from your PA2 code.  The three simple keyword literals not dealt with in PA2 are mentioned here: <code>true</code> is a 1 byte bool prvalue 0x01, <code>false</code> is a 1 byte bool prvalue 0x00, and <code>nullptr</code> is an 8 byte prvalue of a unique type (later to be named <code>std::nullptr_t</code> in your standard library) and has a value of 8 zero bytes.</p>
+
+<p>The value category of an id-expression is an lvalue.  References are implicitly dereferenced so their type is the underlying referenced type, for all other variables and functions their type is the same as their declared type.</p>
+
+<p>Later on there is an additional value category xvalue, which is not reachable in PA8 - however you should account for all three value categories in your system in preparation.</p>
+
+<p>For this assignment the only contexts an expression can be in are initialization contexts where the expression is a full expression.  The rules for initialization are explained in 8.5, and they appeal to the standard conversions.  You can think of the major case of initialization as a function of a destination type, a source type, a source value category and sometimes some other properties of the source (eg null pointer constants, string literals).  Based on these "parameters" the initialization is either well-formed or ill-formed, and if well-formed it dictates a series of implicit conversions that need to be applied.</p>
+
+<p>The other part of annotation is constant expression evaluation.  There are several ways to implement this, but you can essentially consider each expression to have a value that is a property of that expression.  In some cases that value is completely determinable during translation, for example if it is a literal.  In other cases it is unknown until runtime, so you can think of such as a value as in an "undefined" state during translation.  For other values partial information is known.  For example a pointer to a static variables value is not known until link-time, but you can track it in a position-independant manner as a symbol plus a byte offset called an addend.  The symbol is effectively a free variable that you will complete after linking.  The rules in 5.19 about constant expressions imply the information you need to track in this regard, and when you are allowed/required to calculate this value during translation.</p>
+
+<p>If an expression is a constant expression under 5.19 then you will have enough information about its value to evaluate it during parsing.  This is what you must do for array bounds and static_assert, or else the program is ill-formed.</p>
+
+<p>Once the translation units are annotated you will then proceed to link them.  This involves applying 3.5 to associate declarations from different translation units to the same entity.  Once you have determined the full set of linked entities you will then plan out their position in the program image in the order described in the assignment.  Once the final file offsets are known you will then go back and complete the position-independant values with absolute values.  This is known as relocation.  Depending on how you have structured the values you may need to make another pass to propogate these absolute addresses through-out the annotated initializers.</p>
+
+<p>At this stage you are now ready to write the program image.  Iterate through all the entities and write the information described.  For this assignment, for functions you only need to write "fun".  For variables if you know their initial value (they are constant), write the value (constant initialization) - otherwise write zero (zero initialization).  Likewise for temporaries.</p>
+
+<p>You are then ready to output the program image to a file.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

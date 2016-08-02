@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 3 (ctrlexpr)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>ctrlexpr</code> that accepts a <em>C++ Source File</em> on standard input that contains Controlling Expressions (defined below) for Conditional Inclusion, one per logical line.</p>
+
+<p>The input file does NOT include any...</p>
+
+<ul>
+<li>preprocessing directives</li>
+<li>pre-defined macro names</li>
+<li>the pragma operator</li>
+</ul>
+
+<p>Evaluate each controlling expression and return the results in the specified format.</p>
+
+<p><code>ctrlexpr</code> should execute translation phases 1, 2, 3 to delimit logical source lines.</p>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Programming Assignment 2 before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa3.git
+</code></pre>
+
+<p>It contains a stub implementation of <code>ctrlexpr</code> with some <em>optional</em> starter code, a compiled reference implementation and a test suite.</p>
+
+<p>You will also want to reuse most of your code from PA2.</p>
+
+<h3>Mock <code>defined</code> Implementation</h3>
+
+<p>As we do not have any macros defined in PA3, in order to test the <code>defined</code> operator, we will use a mock implementation with the following functionality:</p>
+
+<p>If the first UTF-8 code unit of the identifier is odd than return true, else return false.</p>
+
+<p>There is an implementation of this mock function called <code>PA3Mock_IsDefinedIdentifier</code> in the starter code.</p>
+
+<h3>Input Format</h3>
+
+<p>The C++ Source File shall be read from standard input <code>std::cin</code> in UTF-8 format as per PA1.</p>
+
+<p>Each logical line will contain a (possibly invalid, possibly empty) controlling expression after phase 3.</p>
+
+<h3>Output Format</h3>
+
+<p>For each logical line of the input file <code>ctrlexpr</code> should output zero or one line of output.</p>
+
+<p>In the event the logical source line is empty (contains only whitespace or nothing) after phase 3, <code>ctrlexpr</code> should not output a line.</p>
+
+<p>If the logical source line contains an invalid controlling expression (one that contains invalid tokens or does not match the grammar or semantics of a controlling expression), <code>ctrlexpr</code> should output one line containing <code>error</code>.</p>
+
+<p>In the event the logical source line contains a valid controlling expression, <code>ctrlexpr</code> should output a decimal literal as the result of the controlling expression.  In the case that the output is signed it should have no suffix.  In the event that the output is unsigned it should have the suffix <code>u</code> (lowercase).</p>
+
+<p>At the end of output, <code>ctrlexpr</code> should output <code>eof</code> on a line by itself.</p>
+
+<h3>Error Reporting</h3>
+
+<p>If an error occurs in phases 1, 2 or 3 <code>main</code> should <code>return EXIT_FAILURE</code> as per the behaviour of <code>pptoken</code> in PA1.</p>
+
+<p>For all other errors the line should be output as an <code>error</code> as specified in Output Format (above).</p>
+
+<p>In particular if any of the following conditions are true it is course defined for this assignment to output <code>error</code>:</p>
+
+<ul>
+<li>The right operand of division or modulous is zero</li>
+<li>The right operand of a shift operator is negative or greater than or equal to 64</li>
+</ul>
+
+<h3>Example</h3>
+
+<p>For an input of:</p>
+
+<pre><code>2 + 3
+2u + 3
+2 + 3 == 5
+2 + 3 == 4
+/* blank line */
+2 + == 4
+</code></pre>
+
+<p>Produces an output of:</p>
+
+<pre><code>5
+5u
+1
+0
+error
+eof
+</code></pre>
+
+<h3>Restrictions</h3>
+
+<p>As per PA1</p>
+
+<h3>Definition: Controlling Expression</h3>
+
+<p>A controlling expression is the sequence of tokens that appears in the Conditional Inclusion Preprocessing Directive:</p>
+
+<pre><code>#if &lt;controlling-expression&gt; new-line
+#elif &lt;controlling-expression&gt; new-line
+</code></pre>
+
+<p>If using the token names from PA2 it should match the Controlling Expression Grammar (given below).</p>
+
+<p>The two missing productions from the grammar are <code>integral-literal</code> and <code>identifier_or_keyword</code>.</p>
+
+<p>We shall define them here:</p>
+
+<p>An <code>integral-literal</code> is a <code>literal</code> (not user defined) of a non-array integral type.  Integral types are the subset of the Fundamental Types given here:</p>
+
+<pre><code>signed char
+short int
+int
+long int
+long long int
+unsigned char
+unsigned short int
+unsigned int
+unsigned long int
+unsigned long long int
+wchar_t
+char
+char16_t
+char32_t
+bool
+</code></pre>
+
+<p>Some types that are NOT integral types are:</p>
+
+<pre><code>float
+double
+long double
+void
+nullptr_t
+array of &lt;anything&gt;
+</code></pre>
+
+<p>An <code>identifier_or_keyword</code> is simply an identifier in <code>preprocessing-token</code> context (meaning the <code>identifier</code> from PA1 and not from PA2).  In particular it treats keywords the same as identifiers.  There are two special cases.  They are:</p>
+
+<ul>
+<li><code>true</code>, which is effectively evaluated as <code>1</code></li>
+<li><code>defined</code> which has special meaning in a controlling expression</li>
+</ul>
+
+<blockquote>
+  <p>Note: For PA3, in the context of a preprocessor controlling expression only, we shall course-define the treatment of the identifier <code>true</code> to be evaluated the same as the integer literal <code>1</code>, and the identifier <code>false</code> to be evaluated the same as the integer literal <code>0</code>.  Note that this may conflict slightly with the standard requirements.</p>
+</blockquote>
+
+<p>At this point try to read 16.1 Conditional Inclusion, there will be many "forward" references to terminology that has not been required reading in the course yet, so don't worry if you don't understand everything.  The parts which you do understand should be sufficient to complete this assignment.</p>
+
+<h3>Controlling Expression Grammar</h3>
+
+<pre><code>primary-expression:
+    integral-literal      // see above
+    OP_LPAREN controlling-expression OP_RPAREN
+    defined identifier_or_keyword                 // see above:  defined id
+    defined OP_LPAREN identifier_or_keyword OP_RPAREN       // alternative form: defined(id)
+    identifier_or_keyword       // evaluate as `0`
+
+unary-expression:
+    primary-expression
+    OP_PLUS unary-expression
+    OP_MINUS unary-expression
+    OP_LNOT unary-expression
+    OP_COMPL unary-expression
+
+multiplicative-expression:
+    unary-expression
+    multiplicative-expression OP_STAR unary-expression
+    multiplicative-expression OP_DIV unary-expression
+    multiplicative-expression OP_MOD unary-expression
+
+additive-expression:
+    multiplicative-expression
+    additive-expression OP_PLUS multiplicative-expression
+    additive-expression OP_MINUS multiplicative-expression
+
+shift-expression:
+    additive-expression
+    shift-expression OP_LSHIFT additive-expression
+    shift-expression OP_RSHIFT additive-expression
+
+relational-expression:
+    shift-expression
+    relational-expression OP_LT shift-expression
+    relational-expression OP_GT shift-expression
+    relational-expression OP_LE shift-expression
+    relational-expression OP_GE shift-expression
+
+equality-expression:
+    relational-expression
+    equality-expression OP_EQ relational-expression
+    equality-expression OP_NE relational-expression
+
+and-expression:
+    equality-expression
+    and-expression OP_AMP equality-expression
+
+exclusive-or-expression:
+    and-expression
+    exclusive-or-expression OP_XOR and-expression
+
+inclusive-or-expression:
+    exclusive-or-expression
+    inclusive-or-expression OP_BOR exclusive-or-expression
+
+logical-and-expression:
+    inclusive-or-expression
+    logical-and-expression OP_LAND inclusive-or-expression
+
+logical-or-expression:
+    logical-and-expression
+    logical-or-expression OP_LOR logical-and-expression
+
+controlling-expression:
+    logical-or-expression
+    logical-or-expression OP_QMARK controlling-expression OP_COLON controlling-expression
+</code></pre>
+
+<p>Notice that this grammar is unambiguous and has the precedence and associativity of operators built into it.</p>
+
+<h3>Features</h3>
+
+<p>The following steps do not necessarily need to occur in the order specified, however <code>ctrlexpr</code> should behave <em>as if</em> they had.</p>
+
+<p>First apply phase 1-3 to get a stream of <code>preprocessing-tokens</code>.</p>
+
+<p>Then split them by the <code>new-line</code> token.  Discard/ignore <code>whitespace-sequences</code>.</p>
+
+<p>For each non-empty sequence of <code>preprocessing-tokens</code> <code>ctrlexpr</code> will output one line, either (a) a decimal number; (b) a decimal number followed by <code>u</code>; or (c) <code>error</code>.</p>
+
+<p>Apply some of the "post-tokenization" code from PA2 to get a sequence of <code>tokens</code> (paying attention to the <code>identifier_or_keyword</code> case).</p>
+
+<p>Check that there are no <code>invalid</code> tokens and that all <code>literal</code> tokens are of <code>integral-literal</code> type (defined above).  If not output <code>error</code>.</p>
+
+<p>As per 16.2.4:</p>
+
+<blockquote>
+  <p>For the purposes of this token conversion and evaluation all signed and unsigned integer types act as if they have the same representation as, respectively, <code>intmax_t</code>
+or <code>uintmax_t</code></p>
+</blockquote>
+
+<p><code>intmax_t</code> and <code>uintmax_t</code> are in <code>#include &lt;cstdint&gt;</code>.  On the standard platform they are typedefs <code>long int</code> and <code>unsigned long int</code>, which are both 64-bit.</p>
+
+<blockquote>
+  <p>We will course-define the interpretation of this to mean that each <code>integral-literal</code> is interpreted as per its phase 7 PA2 post-tokenization type first.  Then after that, if it is signed it is promoted to <code>intmax_t</code>, and if it is unsigned it is promoted to <code>uintmax_t</code>.  For this course footnote 148 shall be considered a standard defect, and should be ignored.</p>
+</blockquote>
+
+<p>Promote each <code>integral-literal</code> to one of these two types depending on if it is signed or unsigned.</p>
+
+<p>It is course-defined (and by the ABI and bootstrap) that following integral types are signed:</p>
+
+<pre><code>bool
+wchar_t
+char
+signed char
+short int
+int
+long int
+long long int
+</code></pre>
+
+<p>and the following are unsigned:</p>
+
+<pre><code>unsigned char
+unsigned short int
+unsigned int
+unsigned long int
+unsigned long long int
+char16_t
+char32_t
+</code></pre>
+
+<p>This can also be looked up with <code>std::numeric_limits&lt;T&gt;::is_signed</code></p>
+
+<p>Parse the token sequence by the <code>controlling-expression</code> grammar into a parse tree.  If it does not match the grammar output "error".</p>
+
+<p>Walk the tree in post-order evaluating each sub-expression up to the root.  The behaviour of each of the used operators are documented in clause 5 of the standard.  You do not need to read the entire clause, just the parts that deal with those operators used in the controlling expression grammar.</p>
+
+<p>You should read and understand the concepts of <em>Integral Promotion</em> (4.7), <em>Integer Conversion Rank</em> (4.13) and the <em>Usual Arithmetic Conversions</em> (5.0.10).</p>
+
+<p>After each sub-expression is evaluated promote its type to <code>intmax_t</code> or <code>uintmax_t</code> (depending on whether it signed) before further evaluation.</p>
+
+<p>It is course defined that:</p>
+
+<ul>
+<li>signed integral types (2s-compliment) are sign extended when promoted to a larger type.</li>
+<li>right shift operations on a signed left operand sign preserve (shift in bits the same as sign bits)</li>
+</ul>
+
+<h3>Design Notes (Optional)</h3>
+
+<p>One way to solve PA3 is to create another implementation of <code>IPPTokenStream</code> for PA3 that accumulates <code>preprocessing-tokens</code> until it gets <code>new-line</code> and then sends them off for evaluation and "post-tokenization".  You can create some other class like <code>CtrlExprEvaluator</code> that parses and evaluates these sequences of tokens.</p>
+
+<p>To match the sequence of tokens to the grammar you will need to write a parser.  It is recommended to read chapter 4 of the dragon book if you have it.</p>
+
+<p>Although the PA3 grammar is LR(1), and you could in theory solve the assignment by writing an LR parser generation tool that takes the grammar and automatically generates a parser for it, that is <em>not recommended</em> for this assignment.  There are two reasons.  The first is that it will take longer to implement than the recommended way.  The second is that although an LR parser is easy for this particular grammar, for C++ as a whole it is not the proven approach.</p>
+
+<p>Most agree that a top-down approach makes it easier to deal with the special cases needed to parse C++.  For example, both GCC and Clang use a hand-written top-down approach.  It is true that some have succeeeded in writing LR parsers for C++ using disambiguation techniques like GLR, however we will be recommending and supporting "the typical top-down approach" in this course.  You should understand that there is contention on this point.</p>
+
+<blockquote>
+  <p>Side Note: If you are determined to ignore our advice and use LR parsing than you may hand-write an LR parser generation tool, and build and execute this tool from your Makefile.  As per the usual course restrictions, you may not use a third-party parser generation tool - you have to write it yourself.  The algorithms to do this are described in the second half of chapter 4 of the dragon book.  GLR is not covered in the dragon.  GLR just means that you solve shift/reduce and reduce/reduce conflicts by searching both options in parallel - but no such conflicts exist in this particular grammar.  To LR parse the larger C++ grammar you will need GLR.</p>
+</blockquote>
+
+<p>The recommended way to parse is to write a hand-written predictive top-down parser.  To deal with the left recursion in the PA3 grammar, you simply use iteration and manually preserve the associativity.</p>
+
+<p>For example:</p>
+
+<pre><code>T -&gt; X
+T -&gt; T + X
+</code></pre>
+
+<p>Such a production will match <code>X</code>, <code>X + X</code>, <code>X + X + X</code> and so on.  So we first parse <code>X</code>, then we lookahead to see if there is a <code>+</code>.  If there is, we parse <code>+ X</code> and repeat.  If not we return what we have.  As the operator is left associative we build our parse tree (or evaluation order) leftward.</p>
+
+<p>If you implement the parser in this way than in order to parse a simple expression like <code>42</code>, it will result in a deep call stack from <code>controlling-expression</code> all the way up to <code>primary</code>.  That is ok as a solution to this assignment, we are not too worried about performance.  You should be aware that there is a technique in which you can collapse the calls to all the different binary operator expressions into one call.  This is achieved by keeping a precedence table and making decisions about how to build the parse tree based upon it.  If you have extra time after finishing this assignment, we encourage you to look into and implement this optimization.</p>
+
+<p>It is also recommended that you keep your controlling expression parsing code separate from your future C++ expression parsing code.  Although you could use some common base for both, there are significant differences that are most likely not worth creating an abstract base for.  It will be better to keep the PA3 code encapsulated within your preprocessor.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

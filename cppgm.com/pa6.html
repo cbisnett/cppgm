@@ -1,0 +1,535 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 6 (recog)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>recog</code> that takes as input a set of C++ Source Files, preprocesses, tokenizes and then determines if each token sequence is syntactically valid against the <code>translation-unit</code> grammar given in <code>pa6.gram</code>, with the additional requirements given below.</p>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Programming Assignment 5 before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa6.git
+</code></pre>
+
+<p>It contains:</p>
+
+<ul>
+<li>a stub implementation of <code>recog</code> with some starter code</li>
+<li>a compiled reference implementation <code>recog-ref</code></li>
+<li>a test suite.</li>
+<li>a stdin/stdout wrapper for <code>recog-ref</code> called <code>recog-ref-stdin</code> that also has the <code>--trace</code> switch enabled</li>
+<li>the grammar for this assignment called <code>pa6.gram</code></li>
+<li>a html grammar explorer of <code>pa6.gram</code> in the sub-directory <code>grammar/</code></li>
+</ul>
+
+<p>You will also want to reuse your Preprocessor/Lexer from PA1-PA5.</p>
+
+<h3>Input / Command-Line Arguments</h3>
+
+<p>The same as PA5 <code>preproc</code>.  Behaviour is undefined unless the command-line arguments match:</p>
+
+<pre><code>$ recog -o &lt;outfile&gt; &lt;srcfile1&gt; &lt;srcfile2&gt; ... &lt;srcfileN&gt;
+</code></pre>
+
+<p>with the same relaxations as PA5</p>
+
+<h3>Output Format</h3>
+
+<p><code>recog</code> shall write the following to <code>&lt;outfile&gt;</code>:</p>
+
+<p>The first line is:</p>
+
+<pre><code>recog &lt;N&gt;
+</code></pre>
+
+<p>where <code>&lt;N&gt;</code> is the number of srcfiles given on the command line</p>
+
+<p>The following N lines shall be:</p>
+
+<pre><code>&lt;srcfile&gt; &lt;status&gt;
+</code></pre>
+
+<p>Where:</p>
+
+<ul>
+<li><code>&lt;srcfile&gt;</code> is the filename given on the command line.</li>
+<li><code>&lt;status&gt;</code> is a string, either <code>OK</code> or <code>BAD</code></li>
+</ul>
+
+<h3>Error Handling</h3>
+
+<p>If an error occurs at any stage from opening the file, during translation, or the token sequence does not match <code>translation-unit</code>, than output <code>BAD</code> for that file.  (Do not <code>EXIT_FAILURE</code>)</p>
+
+<p>If no errors occur and the token sequence matches <code>translation-unit</code>, output <code>OK</code> for that file.</p>
+
+<h3>Standard Output / Error</h3>
+
+<p>Standard output and standard error are ignored for <code>recog</code>, however it is suggested that you should output a parse tree (in a text format of your choosing) to standard output on success.</p>
+
+<p>You <em>should not</em> try to mimick the parse tree output format of the reference implementation.  It is presented only as a rough outline of its internal parse tree for debugging purposes, and not designed to be diff-equivilant to your implementation.</p>
+
+<h3>Special Tokens</h3>
+
+<p>We have introduced several special tokens in the grammar.  They are:</p>
+
+<pre><code>TT_IDENTIFIER
+TT_LITERAL
+ST_EMPTYSTR 
+ST_EOF
+ST_FINAL
+ST_NONPAREN
+ST_OVERRIDE
+ST_RSHIFT_1
+ST_RSHIFT_2
+ST_ZERO
+</code></pre>
+
+<h4><code>TT_IDENTIFIER</code></h4>
+
+<p>These are the normal <code>identifier</code> tokens from previous assignments</p>
+
+<h4><code>TT_LITERAL</code></h4>
+
+<p>These include all literal token types from previous assignments, <em>including user-defined literals</em></p>
+
+<h4><code>ST_EMPTYSTR</code></h4>
+
+<p>This represents a literal token with a spelling of <code>""</code>, ie an empty ordinary string literal.</p>
+
+<p>Note that a <code>ST_EMPTYSTR</code> token is also a <code>TT_LITERAL</code> token.</p>
+
+<h4><code>ST_ZERO</code></h4>
+
+<p>This represents a literal token with a spelling of <code>0</code>, ie the zero octal literal.</p>
+
+<p>Note that a <code>ST_ZERO</code> token is also a <code>TT_LITERAL</code> token.</p>
+
+<h4><code>ST_OVERRIDE</code> and <code>ST_FINAL</code></h4>
+
+<p>These tokens are both identifiers with the spelling <code>override</code> and <code>final</code> respectively.  Note that they are not keywords and so will match <code>identifier</code> in other contexts.  They are <em>context-sensetive keywords</em>.  That is they are only considered keywords when used in the correct context.  See 2.11.2 for clarification.</p>
+
+<p>Note that <code>ST_OVERRIDE</code> and <code>ST_FINAL</code> are both also <code>TT_IDENTIFIER</code> tokens.</p>
+
+<h4><code>ST_NONPAREN</code></h4>
+
+<p>This is shorthand for any token NOT including:</p>
+
+<pre><code>OP_LPAREN
+OP_RPAREN
+OP_LSQUARE
+OP_RSQUARE
+OP_LBRACE
+OP_RBRACE
+ST_EOF
+</code></pre>
+
+<h4><code>ST_EOF</code></h4>
+
+<p>This represents the end of the translation unit (<code>emit_eof()</code>)</p>
+
+<h4><code>ST_RSHIFT_1</code> and <code>ST_RSHIFT_2</code></h4>
+
+<p>The PA5 token <code>OP_RSHIFT</code> shall be logically replaced with the two consecutive tokens <code>ST_RSHIFT_1</code> and <code>ST_RSHIFT_2</code> before parsing starts.</p>
+
+<p>We then define a new grammar <code>close-angle-bracket</code>:</p>
+
+<pre><code>close-angle-bracket:
+    OP_GT
+    ST_RSHIFT_1
+    ST_RSHIFT_2
+</code></pre>
+
+<p>and replace occurences of <code>OP_GT</code> that have a "close an angle bracket pair" semantic use with it.  This allows for constructs like <code>T&lt;U&lt;3&gt;&gt;</code> to parse correctly.  See 14.2.3.</p>
+
+<p>To support this we redefine <code>shift-operator</code> (and other uses of <code>OP_RSHIFT</code>) to:</p>
+
+<pre><code>shift-operator:
+    OP_LSHIFT
+    ST_RSHIFT_1 ST_RSHIFT_2
+</code></pre>
+
+<p>So <code>OP_RSHIFT</code> no longer occurs in the grammar.</p>
+
+<h3>Mock Name Lookup</h3>
+
+<p>We will explain briefly what "real name lookup" is, and then explain the "mock name lookup" you will use instead in PA6.</p>
+
+<p>In order to parse C++ successfully and efficiently you must categorize identifiers, such as <code>foo</code>, and <code>simple-template-ids</code> such as <code>foo&lt;bar&gt;</code>, as to what kind of thing they identify.  These are called names.  The process of identifying name categories is called <em>name lookup</em>, and discussed in Clause 3.</p>
+
+<p>As per 3.0.7:</p>
+
+<blockquote>
+  <p>Some names denote types or templates. In general, whenever a name is encountered it is necessary to
+determine whether that name denotes one of these entities before continuing to parse the program that
+contains it.</p>
+</blockquote>
+
+<p>So for example if you encounter the following in block scope:</p>
+
+<pre><code>x * y;
+</code></pre>
+
+<p>If <code>x</code> is a type, than this declares a <code>pointer to x</code> with the name <code>y</code>:</p>
+
+<pre><code>typedef int x;
+x * y;
+</code></pre>
+
+<p>If <code>x</code> is a variable, than <code>x * y</code> is an <code>expression-statement</code>, and so it is a function call to the binary <code>operator*</code> with the two operands <code>x</code> and <code>y</code>:</p>
+
+<pre><code>struct X {...};
+X x, y;
+x * y;
+</code></pre>
+
+<p>Later in the course (not for PA6), in your final compiler, as you are parsing, you will lookup each name in the symbol table to determine what category of name it is.  This may involve instantiating templates.  Instantiating templates may further involve evaluating constant expressions to determine the correct specialization to use.  Evaluating constant expressions may involve calling <code>constexpr</code> functions.  This is all densely interconnected with semantic analysis.</p>
+
+<p>For PA6 instead of that, you will use a mock implementation of name lookup that does not require a symbol table.</p>
+
+<p>Based on the lexical form of an identifier you can determine its name category.</p>
+
+<p>Specifically:</p>
+
+<ul>
+<li>If an identifier contains the letter <code>C</code>, it is a <code>class-name</code></li>
+<li>If an identifier contains the letter <code>T</code>, it is a <code>template-name</code></li>
+<li>If an identifier contains the letter <code>Y</code>, it is a <code>typedef-name</code></li>
+<li>If an identifier contains the letter <code>E</code>, it is an <code>enum-name</code></li>
+<li>If an identifier contains the letter <code>N</code>, it is a <code>namespace-name</code></li>
+</ul>
+
+<p>Note that an identifier can belong to two or more categories.</p>
+
+<p>For example <code>TC1</code> is both a <code>template-name</code> and a <code>class-name</code>, so therefore <code>TC1&lt;123&gt;</code> is a <code>simple-template-id</code>, and that <code>simple-template-id</code> will also match as a whole <code>class-name</code>.</p>
+
+<p>Functions to determine this mock name lookup are included in the starter code.</p>
+
+<p>The situations where an identifier is required to match one of these names, is specified implictly in the grammar by the use of the <code>*-name</code> grammars.</p>
+
+<p>For example suppose we have a nonterminal <code>foo</code> defined as follows:</p>
+
+<pre><code>foo:
+    class-name enum-name
+
+class-name:
+    TT_IDENTIFIER
+    simple-template-id
+
+enum-name:
+    TT_IDENTIFIER
+
+simple-template-id:
+    template-name OP_LT template-argument-list? close-angle-bracket
+</code></pre>
+
+<p>Here, to match the nonterminal <code>foo</code>, a <code>class-name</code> is required, followed by an <code>enum-name</code>.</p>
+
+<ul>
+<li>So first we check if the next token is an identifier.</li>
+<li>Then we check if it contains the letter <code>C</code>.</li>
+<li>We check if it is also <code>template-name</code> (contains <code>T</code>), and only if it does, we reduce a <code>simple-template-id</code>.</li>
+<li>We have now succesfully parsed a <code>class-name</code> (for example <code>C1</code> or <code>TC2&lt;bar&gt;</code>), and move on to the <code>enum-name</code>.</li>
+<li>We check that it is an identifier and that it contains a letter <code>E</code>, for example <code>Ebaz</code>.</li>
+<li>If it is we return the <code>enum-name</code>, and have successfully parsed <code>foo</code>.</li>
+</ul>
+
+<h3>PA6 Grammar</h3>
+
+<p>The PA6 grammar is located in the file <code>pa6.gram</code> in the starter kit.</p>
+
+<p>It uses an extended BNF format with the following operators:</p>
+
+<pre><code>foo?       means 0 or 1 foo in sequence
+foo*       means 0 or more foo
+foo+       means 1 or more foo
+(foo)      parenthesis group symbols together for
+                application of the above operators
+</code></pre>
+
+<p>Line splices are ignored.  Alternative bodies are given indented, one per logical line.</p>
+
+<p>For each non-terminal <code>foo</code>, an analysis of the non-terminal <code>foo</code> is given in <code>grammar/foo.html</code> in the starter kit.</p>
+
+<p>Each analysis includes:</p>
+
+<pre><code>USED: The non-terminals that refer to `foo` (back references)
+FIRST: The set of tokens that can possibly start `foo`
+FOLLOW: The set of tokens that can possibly occur after `foo`
+</code></pre>
+
+<p>Following these items is the grammar for <code>foo</code>, and then a breadth first list of the grammars it refers to.  That is, first the grammars that <code>foo</code> uses are listed (first degree), followed by the grammars that are used by those grammars (second degree), and so on until all nested referenced grammars are shown.</p>
+
+<p>Each non-terminal is html-linked to its own analysis page.</p>
+
+<p>Finally there is a <code>grammar/terminals.html</code> page that shows the <code>USED</code> field of each terminal (token) type.</p>
+
+<h3>Special non-terminals:</h3>
+
+<h4><code>decl-specifier-seq</code></h4>
+
+<p>In the PA6 grammar when <code>decl-specifier-seq</code> is used, it must always be present.  This precludes matching constructors, destructors and conversion operators:</p>
+
+<pre><code>class C
+{
+    C();               // wont match PA6
+    ~C();              // wont match PA6
+    operator bool();   // wont match PA6
+}
+</code></pre>
+
+<p>You will implement parsing constructor, destructor and conversion operators in a later assignment, when more of your symbol table machinery is implemented.</p>
+
+<p>Further there is an important semantic rule regarding the form of <code>decl-specifier-seq</code>, it is:</p>
+
+<blockquote>
+  <p>If a <code>type-name</code> is encountered while parsing a <code>decl-specifier-seq</code>, it is interpreted as part of the <code>decl-specifier-seq</code> if and only if there is no previous <code>type-specifier</code> other than a <code>cv-qualifier</code> in the <code>decl-specifier-seq</code>.</p>
+</blockquote>
+
+<p>You will need to implement this rule while parsing a <code>decl-specifier-seq</code>.</p>
+
+<h4><code>closing-angle-bracket</code></h4>
+
+<p>When angle brackets are used to delimit a sequence of tokens, for example <code>static_cast&lt;C1&gt;(bar)</code>, <code>Tfoo&lt;1,2,3&gt;</code>, or <code>T1&lt;T2&lt;C&gt;&gt;</code>, there are problems caused by the fact that <code>&gt;</code> and <code>&gt;&gt;</code> can also be used as operators.</p>
+
+<p>How to deal with this is described in 14.2.3.</p>
+
+<p>The first non-nested <code>closing-angle-bracket</code> encountered is taken to close the bracket pair.</p>
+
+<p>C++ tokens nest correctly in terms of the four kinds of brackets <code>()</code>, <code>[]</code>, <code>{}</code> and <code>&lt;&gt;</code>.  For the three non-angle brackets types (<code>()</code>, <code>[]</code>, <code>{}</code>) this is true without any caveats, as those tokens are only ever used as brackets.  Closing angle brackets however look exactley the same as the operators <code>&gt;</code> and <code>&gt;&gt;</code>, and so these tokens are not used in a balanced fashion.</p>
+
+<p>What the rule in 14.2.3 is saying is that when you are inside an angle bracket pair <code>&lt;&gt;</code>, the next <code>closing-angle-bracket</code> parsed <em>at the same nesting level as the opening angle bracket</em> closes it, and is never parsed as part of an <code>&gt;</code> operator or <code>&gt;&gt;</code> operator.</p>
+
+<p>So as an example:</p>
+
+<pre><code>TC1&lt; 1&gt;2 &gt; x1;       // syntax error
+TC1&lt;(1&gt;2)&gt; x2;       // OK - not at same nested level
+TC1&lt;TC2&lt;1&gt;&gt; x3;      // OK
+TC1&lt;TC2&lt;6&gt;&gt;1&gt;&gt; x4;   // syntax error
+TC1&lt;TC2&lt;(6&gt;&gt;1)&gt;&gt; x5; // OK
+</code></pre>
+
+<p>We will suggest an implementation in the design notes.</p>
+
+<h3>Ambiguities</h3>
+
+<p>You should pay attention to the two special types of ambiguities mentioned in 6.8 and 8.2, these are present in the test suite.  You should check that your parser not only recoginizes these cases but produces the correct parse tree for them.</p>
+
+<h3>Ill-formed but Syntactically Valid</h3>
+
+<p>In some cases there are constructs that could be reduced to the PA6 grammar, but could never be part of a valid C++ program.  In some of those cases the reference implementation will reject them, in others it will accept them and leave them to fail later in semantic analysis.  In general it is a grey area and a design decision.  We expect that your implementation matches the reference implementation at least in its result for the cases in the provided test suite.  If there is a case that you think falls into this category, and are not sure about, please bring it up on forum.cppgm.org for discussion.  In general the best policy is to accept these constructs, and defer as much logic as possible until semantic analysis, when a disambiguated parse tree is available.</p>
+
+<h3>Design Notes (Optional)</h3>
+
+<p>As usual these design notes are optional, there is more than one way to do it, and we suggest one possible implementation.</p>
+
+<p>To start with you should review the grammar in the standard Annex A.3 through A.13, side-by-side with the <code>pa6.gram</code> file.  There is an <strong>Index of grammar productions</strong> at page 1273 of N3485.  If there is a nonterminal name that you don't recognize or understand, use that Index to look up where that grammar is discussed in the main text.  You can also use the grammar explorer in the <code>grammar</code> directory of the starter kit to get more information about a nonterminal.</p>
+
+<p>Once you are comfortable with the grammar, you will need to prepare your parsing infrastructure.  You should prepare a <code>Token</code> class if you have not already done so, and place the tokens produced from your PA5 code into it as a <code>vector&lt;Token&gt;</code>, replacing occurences of <code>OP_RSHIFT</code> with the two tokens <code>ST_RSHIFT_1</code> and <code>ST_RSHIFT_2</code>, and terminating the sequence with a <code>ST_EOF</code> token.</p>
+
+<p>To write the parser, we recommend that for each nonterminal <code>foo</code> you should write a function <code>parse_foo</code>.  These functions can be member functions of your C++ parser class.</p>
+
+<p>Each parse function in the reference implementation returns an instance of a dynamic type called <code>AST</code>.  We will describe the properties of this type here:</p>
+
+<p>An <code>AST</code> is one of the following:</p>
+
+<ul>
+<li>an Error AST</li>
+<li>an Empty AST (distinct from Error AST)</li>
+<li>a Token AST</li>
+<li>a Compound AST</li>
+</ul>
+
+<p>An Error AST represents a failed parse.</p>
+
+<p>As Empty AST represents a valid but empty parse tree.</p>
+
+<p>A Token AST wraps a single <code>Token</code> from the token stream.</p>
+
+<p>A Compound AST contains a <code>map&lt;string, AST&gt;</code>, where the value field is a non-Error AST.  Many times the key names used in this map in the reference implementation will correspond to a non-terminal name, but sometimes we use shorthand context-sensetive names.</p>
+
+<p>So this AST type forms a kind of "associative tree" data structure.  Additionally each AST type has a <code>std::set</code> of string "properties" it can be marked with and queried for.</p>
+
+<p>Within the parser class there is a lookahead position, initially <code>0</code>, pointing at the first token.</p>
+
+<p>The interface discipline of a parse function is as follows:</p>
+
+<p>If the parse function succeeds it shall return a non-Error AST representing the parse sub-tree it has found, and shall leave the lookahead one past the last token used.</p>
+
+<p>If the parse function fails it shall return an Error AST, and shall reset the lookahead position to where it was on entry.</p>
+
+<p>It is easy to see from here how to get from this architecture to a recursive descent parser.  Furthermore you can use <code>FIRST</code> and <code>FOLLOW</code> (when they are small) to make predictive decisions to cut down parse time.</p>
+
+<p>You can reread the first half of chapter 4 of the dragon book for a refresher on top down parsing.</p>
+
+<p>In cases where you need to parse a sequence of the same non-terminal (<code>foo*</code> or <code>foo+</code>), in almost all cases the C++ grammar will allow you to do this greedily.  That is you can match as many as you can, and you will usually not need to backtrack, you can usually fail the parent parse function without trying shorter sequences.</p>
+
+<p>Keep in mind that the AST type described is just a placeholder type that will be replaced with a set of static types later on for the final compiler.  If you use the described architecture than do not spend too much time worrying about exactley what key names to use and how to structure the tree.  It only needs to provide you enough information to verify that the tokens were recognized correctly.</p>
+
+<p>With regard to implementing the <code>close-angle-bracket</code> problem, we recommend keeping track of your current nesting level and bracket type.</p>
+
+<p>That means on entry to <code>parse_translation_unit</code> you are at nesting level 0 and not inside any bracket type.  If you parse an opening bracket, increase your nesting level and push the current bracket type onto a stack.  When you parse a closing bracket, reduce the nesting level and pop the bracket type.</p>
+
+<p>When you are parsing an expression involving the non-bracket form of <code>OP_GT</code> or <code>ST_RSHIFT_1/ST_RSHIFT_2</code> (ie right shift and greater than) and the current bracket type is angle brackets, refuse to match those operators, because they are reserved for use by <code>close-angle-bracket</code></p>
+
+<p>Note that it is possible to parse in a much more efficient way (with much better prediction) than the way that <code>recog-ref</code> does.  This can be achieved by combining certain similar production prefixes together, effectively doing some localized bottom up parsing.  Better performance can also be realized through earlier detection using the lookahead, combining expression parsing with a precedence table as mentioned in PA3, and many other things.  However for this assignment we are mainly concerned with recognizing the correct unambiguous parse of the translation unit.  Once correct, and regression testing is in place, you can always add these optimizations incrementally later.</p>
+
+<h3><code>--trace</code> flag (optional)</h3>
+
+<p>The reference implementation has an extra command-line switch <code>--trace</code> that traces the progress of the recursive descent by logging:</p>
+
+<ul>
+<li>when a parse function is entered</li>
+<li>when a parse function exits</li>
+<li>whether the parse function succeeded or failed</li>
+<li>what the current lookahead is</li>
+</ul>
+
+<p>It is enabled by default in the <code>recog-ref-stdin</code> wrapper.</p>
+
+<p>You may wish to implement a similar switch as an aide to debugging your parser.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

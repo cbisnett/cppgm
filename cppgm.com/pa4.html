@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 4 (macro)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>macro</code> that accepts a <em>C++ Source File</em> on standard input and executes phases 1 through 6 and the tokenization part of phase 7.</p>
+
+<p>The input file may contain:</p>
+
+<ul>
+<li><code>#define</code> preprocessing directives</li>
+<li><code>#undef</code> preprocessing directives</li>
+</ul>
+
+<p>The input file does NOT include any...</p>
+
+<ul>
+<li>preprocessing directives other than <code>#define</code> or <code>#undef</code></li>
+<li>pre-defined macro names</li>
+<li>the pragma operator</li>
+</ul>
+
+<p>Output the resulting tokens as per PA2 <code>posttoken</code>.</p>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Programming Assignment 2 before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa4.git
+</code></pre>
+
+<p>It contains a stub implementation of <code>macro</code>, a compiled reference implementation and a test suite.</p>
+
+<p>You will also want to reuse most of your code from PA2.</p>
+
+<h3>Input Format</h3>
+
+<p>The C++ Source File shall be read from standard input <code>std::cin</code> in UTF-8 format as per PA1 <code>pptoken</code>.</p>
+
+<h3>Output Format</h3>
+
+<p>The tokens shall be output as per PA2 <code>posttoken</code>.</p>
+
+<h3>Error Reporting</h3>
+
+<p>If an error occurs <code>macro</code> should <code>return EXIT_FAILURE</code> as per the behaviour of <code>pptoken</code> in PA1.</p>
+
+<h3>Example</h3>
+
+<p>For an input of:</p>
+
+<pre><code>#define a 3
+#define f(x) x x
+f(a)
+</code></pre>
+
+<p>Produces an output of:</p>
+
+<pre><code>literal 3 int 03000000
+literal 3 int 03000000
+eof
+</code></pre>
+
+<h3>Restrictions</h3>
+
+<p>As per PA1</p>
+
+<h3>Features</h3>
+
+<p>Once you have executed phase 1-3 as per PA1 <code>pptoken</code> to produce a sequence of <code>preprocessing-tokens</code>, you will divide them into preprocessing directives and <code>text-sequences</code>.</p>
+
+<p>Preprocessing directives can be identified by their prefix, one of:</p>
+
+<pre><code>start-of-file #
+start-of-file whitespace-sequence #
+new-line #
+new-line whitespace-sequence #
+</code></pre>
+
+<p>Where <code>start-of-file</code> denotes the beggining of the token sequence.</p>
+
+<p>Any of these patterns must start a preprocessing directive.  The preprocessing directive is terminated by the next <code>new-line</code>.</p>
+
+<p>The only preprocessing directives for PA4 will be macro defines and undefs:</p>
+
+<pre><code>// object-like macros
+# define identifier new-line
+# define identifier must-whitespace replacement-list new-line
+
+// function-like macros
+# define identifier no-whitespace ( ) replacement-list new-line
+# define identifier no-whitespace ( identifier-list ) replacement-list new-line
+# define identifier no-whitespace ( ... ) replacement-list new-line
+# define identifier no-whitespace ( identifier-list , ... ) replacement-list new-line
+
+// undefine macro
+# undef identifier new-line
+</code></pre>
+
+<p><code>no-whitespace</code> means that there is no <code>whitespace-sequence</code> between the two adjacent tokens.  <code>must-whitespace</code> means there <em>must</em> be a <code>whitespace-sequence</code> between the two adjacent tokens. Otherwise <code>whitespace-sequence</code> may optionally appear between any tokens.</p>
+
+<p>A <code>replacement-list</code> is a possibly empty sequence of any <code>preprocessing-tokens</code> apart from <code>new-line</code>.</p>
+
+<p>An <code>identifier-list</code> is a comma-separated sequence of <code>identifiers</code>.</p>
+
+<p><code>#define</code> directives define macros, <code>#undef</code> directives undefine them.</p>
+
+<p>A <code>text-sequence</code> is a maximal sequence of tokens that is not part of a preprocessing directive.</p>
+
+<p>Each <code>text-sequence</code> must be macro replaced using the currently defined set of macros at that point in the file.  Once this has been done the macro replaced <code>preprocessing-tokens</code> should be processed by phase 5-7 as per PA2 <code>posttoken</code> and output.</p>
+
+<p>The rules for macro replacement are described in section <em>16.3 Macro Replacement</em> of the standard.</p>
+
+<blockquote>
+  <p>If the name of the macro being replaced is found during this scan of the replacement list (not including the
+rest of the source file’s preprocessing tokens), it is not replaced. Furthermore, if any nested replacements
+encounter the name of the macro being replaced, it is not replaced. These nonreplaced macro name preprocessing
+tokens are no longer available for further replacement even if they are later (re)examined in contexts
+in which that macro name preprocessing token would otherwise have been replaced.</p>
+</blockquote>
+
+<p>We shall course-define two invocations X and Y to be nested with respect to each other if the head macro name <code>identifier</code> token of Y was part of the replaced tokens of the X invocation.  This nestedness relationship shall not survive parameter substitution:</p>
+
+<pre><code>#define f(x) 1 g(x)
+#define g(x) 2 f(x)
+
+f(f(x))
+</code></pre>
+
+<p>The trace of the above is:</p>
+
+<pre><code>f(f(x))
+f(1 g(x))
+f(1 2 f(x))
+1 g(1 2 f(x))
+1 2 f(1 2 f(x))
+</code></pre>
+
+<p>However a macro name token that is not replaced due to nesting is never replaced again, even after substitution as:</p>
+
+<pre><code>#define z z[0]
+#define f(x) 1 x
+
+f(z)
+</code></pre>
+
+<p>The trace is:</p>
+
+<pre><code>f(z)
+f(z[0])
+1 z[0]
+</code></pre>
+
+<p>z remains unavailable for invocation even after it is substituted in a parameter.</p>
+
+<p>Finally we show:</p>
+
+<pre><code>#define f(x) 1 x
+#define g(x) 2 x
+
+g(f)(g)(3)
+</code></pre>
+
+<p>The trace is:</p>
+
+<pre><code>g(f)(g)(3)
+2 f(g)(3)  &lt;-- f is nested with respect to g as the token is part of the previous g invocation
+2 1 g(3)   &lt;-- g is nested with respect to f, therefore it is not replaced (g -&gt; f -&gt; g)
+</code></pre>
+
+<p>Note that this course-defined interpretation of the nesting semantics is not necessarily the same one used by all other preprocessors (in particular gcc).</p>
+
+<h3>Design Notes (optional)</h3>
+
+<p>As usual these design notes only describe one possible way to do this assignment, and are entirely optional.</p>
+
+<p>First of all, it is recommended that you read 16.3 a couple of times before you continue reading these notes, and certainly before you start writing code.  Some find the logic of macro replacement quite challenging to implement, so be prepared for this.</p>
+
+<p>You can start by making a <code>PreprocessingToken</code> class that packs up the output of <code>IPPTokenStream</code>.</p>
+
+<p>Perform a simple top-down predictive parse to get a stream of preprocessing directives and <code>text-sequences</code>.</p>
+
+<p>Keep a table of currently defined macros.</p>
+
+<p>When you encounter a <code>#define</code> add the macro to the table.  If it currently exists check to see that the <code>identifier-list</code> and <code>replacement-list</code> is the same as the currently defined one.  It is an error if they do not match.</p>
+
+<p>When you encounter an <code>#undef</code> remove the macro from the table.</p>
+
+<p>When you encounter a <code>text-sequence</code> you need to process any macro invocations it contains.</p>
+
+<p>As a first step note that <code>new-lines</code> are not significant once a <code>text-sequence</code> has been identified, so you can collapse <code>new-lines</code> into <code>whitespace-sequence</code> at this point.  After that you will also want to collapse each resulting contiguous sequences of <code>whitespace-sequences</code> into a singular <code>whitespace-sequence</code>.</p>
+
+<p>As you find macro invocations you will invoke them and replace the invocation with a new sequence of tokens.  These new tokens have to be <em>rescanned</em>.</p>
+
+<p>Consider the following:</p>
+
+<pre><code>#define f(x) 1 x (
+#define g(x) 2 x
+f(g)b)
+</code></pre>
+
+<p>The <code>text-sequence</code> is as follows:</p>
+
+<pre><code>f(g)b)
+</code></pre>
+
+<p>After the first invocation <code>f(g)</code> is replaced by <code>1 g (</code> resulting in:</p>
+
+<pre><code>1 g (b)
+</code></pre>
+
+<p>This must be rescanned, and a new invocation is found.  That of <code>g (b)</code>, which is replaced by <code>2 b</code>:</p>
+
+<pre><code>1 2 b
+</code></pre>
+
+<p>Given the nature of that operation, a good data structure to use is a stack, where the top of the stack is the start of the text sequence (ie token order is in reverse).  That way when an invocation is replaced, its tokens can be popped off the top of the stack and the replacement list can be pushed onto it, and processing can continue from the top of the stack again.</p>
+
+<p>After you identify a function-like macro invocation and its arguments, there are three possible transformations you may need to perform on each argument before they are used:</p>
+
+<ul>
+<li>the argument is used as is</li>
+<li>the argument is macro replaced before being used</li>
+<li>the argument is stringized</li>
+</ul>
+
+<p>Which of the three options is applied depends on the usage of the parameter within the <code>replacement-list</code> of the macro.  If it follows a <code>#</code>, the argument is stringized.  If it is next to a <code>##</code> the argument is used as is.  If neither, than it is macro replaced before being used.</p>
+
+<p>The rules for nesting and recursion are difficult to understand, and even more difficult to implement.</p>
+
+<p>We suggest keeping with each identifier token, a blacklist of nested macro names and a noninvokable flag.  When an identifier token is produced as part of a macro invocation its blacklist is assigned to be that of the head token of the macro that was just invoked, and also the name of the macro that was used is added.</p>
+
+<p>Once you have identified a new potential macro invocation, check to see if the heads name is contained in its own blacklist, if it is flag it as noninvokable.  If the head token is flagged as noninvokable, abort the invocation.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

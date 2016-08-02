@@ -1,0 +1,724 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 2 (posttoken)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>posttoken</code> that accepts a <em>C++ Source File</em> on standard input that does NOT include any...</p>
+
+<ul>
+<li>preprocessing directives</li>
+<li>pre-defined macro names</li>
+<li>the pragma operator</li>
+</ul>
+
+<p>...executes phases 1, 2, 3, 4, 5, 6 and the tokenization part of 7 of the <em>Phases of Translation</em>, and describes the resulting sequence of analyzed and categorized <code>tokens</code> to standard output in the specified format.</p>
+
+<p>Notice that by virtue of the restrictions, phase 4 (preprocessing) is a <em>no-op</em> (does nothing).</p>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Programming Assignment 1 before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa2.git
+</code></pre>
+
+<p>It contains a stub implementation of <code>posttoken</code> with some <em>optional</em> starter code, a compiled reference implementation and a test suite.</p>
+
+<p>You will also want to reuse most of your code from PA1.</p>
+
+<h3>Input Format</h3>
+
+<p>The C++ Source File shall be read from standard input <code>std::cin</code> in UTF-8 format as per PA1.</p>
+
+<h3>Error Reporting</h3>
+
+<p>If an error occurs in phases 1, 2 or 3 <code>main</code> should <code>return EXIT_FAILURE</code> as per the behaviour of <code>pptoken</code> in PA1.</p>
+
+<p>If an error occurs while converting a <code>preprocessing-token</code> to a <code>token</code> than you should output an <code>invalid</code> token (see below) and continue.</p>
+
+<p>Preprocessing-tokens <code>#</code>, <code>##</code>, <code>%:</code>, <code>%:%:</code>, <code>non-whitespace-characters</code>, and <code>header-names</code>, should be output as <code>invalids</code>.</p>
+
+<p>If a <code>preprocessing-token</code> contains a pre-defined macro names or the pragma operator you may treat them as identifiers.</p>
+
+<h3>Restrictions</h3>
+
+<p>As per PA1</p>
+
+<h3>Output Format</h3>
+
+<p><code>posttoken</code> shall write to standard output the following in UTF-8 format:</p>
+
+<p>For each token in the sequence, one line shall be printed consisting of space-character separated elements.</p>
+
+<p>The first element is the <em>Token Type</em>, one of:</p>
+
+<pre><code>simple
+identifier
+literal
+user-defined-literal
+invalid
+</code></pre>
+
+<p>The second element is the UTF-8 encoded <em>source</em> from.  The <em>source</em> is the <em>PA1 Token Data</em>.  (In particular it should have <code>universal-character-names</code> decoded, but <code>escape-sequences</code> are not decoded).</p>
+
+<p>In the case of string literal token concatenation, multiple <code>preprocessing-tokens</code> are used to form a single <code>token</code>.  The source for such a token is a space-seperated list of the <code>preprocessing-token</code> sources.  If string literal concatenation fails than output an <code>invalid</code> that also has a source of the same space seperated list.</p>
+
+<p>The output should end with a <code>eof</code> on line by itself.</p>
+
+<p>Depending on the Token Type the remaining elements are as follows:</p>
+
+<h4>simple</h4>
+
+<p><code>simple</code> represent <code>keywords</code>, <code>operators</code> and <code>punctuators</code>.</p>
+
+<p>This includes <code>true</code>, <code>false</code>, <code>nullptr</code>, <code>new</code> and <code>delete</code> - for this assignment we will treat them as <code>keywords</code> and not <code>literals</code> or <code>operators</code>.</p>
+
+<p>They are output as</p>
+
+<pre><code>simple &lt;source&gt; &lt;TERMNAME&gt;
+</code></pre>
+
+<p>Where <code>&lt;TERMNAME&gt;</code> is given in the list below under Simple Token Types (defined below).</p>
+
+<p>For example, for an input of:</p>
+
+<pre><code>auto &amp;&amp;
+</code></pre>
+
+<p>the output is:</p>
+
+<pre><code>simple auto KW_AUTO
+simple &amp;&amp; OP_LAND
+</code></pre>
+
+<h4>identifier (in output context)</h4>
+
+<p><code>identifiers</code> are output as</p>
+
+<pre><code>identifier &lt;source&gt;
+</code></pre>
+
+<p>Where <code>&lt;source&gt;</code> is the identifier in UTF-8, for example for an input of:</p>
+
+<pre><code>foo
+</code></pre>
+
+<p>the output is:</p>
+
+<pre><code>identifier foo
+</code></pre>
+
+<h4>literal</h4>
+
+<pre><code>literal &lt;source&gt; &lt;type&gt; &lt;hexdump&gt;
+</code></pre>
+
+<p>Where <code>&lt;type&gt;</code> is the type of the literal - either a Fundamental Type (defined below), or an <code>array of &lt;n&gt; &lt;fundamental_type&gt;</code>.</p>
+
+<p>For example:</p>
+
+<pre><code>char
+long long int
+array of 42 char16_t
+</code></pre>
+
+<p>And <code>&lt;hexdump&gt;</code> is the hexadecimal representation of the data in memory in the Linux x86-64 ABI (defined below).</p>
+
+<blockquote>
+  <p>Important: When scanning <code>floating-literals</code> for output, please use the functions from the starter code <code>PA2Decode_float</code>, <code>PA2Decode_double</code> and <code>PA2Decode_long_double</code>.  You may also implement scanning yourself but please pass the literal through these functions for PA2 output for bit-perfect compatibility with test harness and reference implementation.</p>
+</blockquote>
+
+<p>For example, for an input of:</p>
+
+<pre><code>1000000 'A' "ABC" 3.2
+</code></pre>
+
+<p>the output is:</p>
+
+<pre><code>literal 1000000 int 40420F00
+literal 'A' char 41
+literal "ABC" array of 4 char 41424300
+literal 3.2 double 9A99999999990940
+</code></pre>
+
+<p>In the case of string literal concatenation:</p>
+
+<pre><code>"abc" /* concat */ "def"
+</code></pre>
+
+<p>The output should have the sources joined space separated:</p>
+
+<pre><code>literal "abc" "def" array of 7 char 61626364656600
+</code></pre>
+
+<h4>user-defined-literal</h4>
+
+<p>One of:</p>
+
+<pre><code>user-defined-literal &lt;source&gt; &lt;ud-suffix&gt; integer &lt;prefix&gt;
+user-defined-literal &lt;source&gt; &lt;ud-suffix&gt; floating &lt;prefix&gt;
+user-defined-literal &lt;source&gt; &lt;ud-suffix&gt; character &lt;type&gt; &lt;hexdump&gt;
+user-defined-literal &lt;source&gt; &lt;ud-suffix&gt; string &lt;type&gt; &lt;hexdump&gt;
+</code></pre>
+
+<p>Where <code>&lt;ud-suffix&gt;</code> is the <code>ud-suffix</code></p>
+
+<p>In the case of <code>integer</code> and <code>floating</code>, <code>&lt;prefix&gt;</code> is the source without the <code>ud-suffix</code></p>
+
+<p>In the case of <code>string</code> and <code>character</code>, <code>&lt;type&gt; &lt;hexdump&gt;</code> have the same meaning as in <code>literal</code> (above).</p>
+
+<p>For example:</p>
+
+<pre><code>123_foo 4.2_bar 0x3_baz "abc"_qux 'a'_quux
+</code></pre>
+
+<p>outputs:</p>
+
+<pre><code>user-defined-literal 123_foo _foo integer 123
+user-defined-literal 4.2_bar _bar floating 4.2
+user-defined-literal 0x3_baz _baz integer 0x3
+user-defined-literal "abc"_qux _qux string array of 4 char 61626300
+user-defined-literal 'a'_quux _quux character char 61
+</code></pre>
+
+<h4>invalid</h4>
+
+<p>For any valid <code>preprocessing-token</code> that does not posttokenize output:</p>
+
+<pre><code>invalid &lt;source&gt;
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code># 123abc 1..e
+</code></pre>
+
+<p>Should output:</p>
+
+<pre><code>invalid #
+invalid 123abc
+invalid 1..e
+</code></pre>
+
+<p>Also as stated above invalid string literal concatenation should output one invalid.  For example:</p>
+
+<pre><code>u8"abc" u"def" U"ghi"
+</code></pre>
+
+<p>Should output:</p>
+
+<pre><code>invalid u8"abc" u"def" U"ghi"
+</code></pre>
+
+<h3>Features</h3>
+
+<p>First you will need to apply the same functionality from pptoken to get the stream of <code>processing-tokens</code>.</p>
+
+<p><code>whitespace-sequence</code> and <code>new-line</code> are ignored.  (They are for preprocessing, which we shall implement in a later assignment)</p>
+
+<p>Any occurences of <code>non-whitespace-character</code> or <code>header-name</code> output as an <code>invalid</code>.</p>
+
+<p>The remaining <code>preprocessing-tokens</code> are:</p>
+
+<pre><code>identifier
+preprocessing-op-or-punc
+pp-number
+character-literal
+user-defined-character-literal
+string-literal
+user-defined-string-literal
+</code></pre>
+
+<p>We will discuss each of them:</p>
+
+<h4>identifier (in preprocessing-token context)</h4>
+
+<p>If it is a member of the keyword list, output it as a keyword, otherwise output it as an identifier.</p>
+
+<h4>preprocessing-op-or-punc</h4>
+
+<p>If you encounter the operators <code>#</code>, <code>##</code>, <code>%:</code>, <code>%:%:</code> output them as <code>invalid</code>.</p>
+
+<p>For the remaining <code>operators</code> and <code>punctuation</code> you should map them to the appropriate <code>simples</code> given in the table below, or output them as <code>invalid</code> if not found.</p>
+
+<h4>pp-number</h4>
+
+<p>You need to analyze the string and classify it as matching the <code>integer-literal</code>, <code>floating-literal</code>, <code>user-defined-integer-literal</code> or <code>user-defined-floating-literal</code> grammar.</p>
+
+<p>If it doesn't match any of these grammars, output it as <code>invalid</code>.</p>
+
+<p>In the case of <code>user-defined-integer-literal</code> and <code>user-defined-floating-literal</code> you need to split the <code>ud_suffix</code> off and then output the prefix and <code>ud-suffix</code> as a string.</p>
+
+<p>In the case of <code>integer-literal</code> and <code>floating-literal</code> you will then need to calculate its appropriate type (see 2.14.2 and 2.14.4 in the standard).  If no appropriate type is found output it as an <code>invalid</code>.</p>
+
+<p>Once the appropriate type is found you will then scan it into that type.</p>
+
+<p>For <code>floating-literals</code> once you have confirmed that they match the appropriate grammar, use the method shown in <code>Decode_float</code>, <code>Decode_double</code> and <code>Decode_long_double</code> in the starter code to scan them for output.  (This is just for testing so the hexdump is binary identical to the reference implementation.)</p>
+
+<p>You may <em>optionally</em> check that <code>floating-literals</code> are in the range of their types:</p>
+
+<blockquote>
+  <p>If the scaled value is not in the range of representable values for its type, the program is ill-formed. (course defined optional)</p>
+</blockquote>
+
+<p>but this is not required for PA2, nor will it be tested for PA2.</p>
+
+<p>For <code>integer-literals</code> you need to check that they fit into the maximal type based on their <code>integer-suffix</code>, if they do not output them as <code>invalid</code>.  Calculate the appropriate type to place them in and scan them into that type for output.  This is explained in 2.14.2.</p>
+
+<h4>character-literal</h4>
+
+<p>Escape sequences (2.14.3.3 Table 7) need to be decoded into their code point.</p>
+
+<p>We shall course define the limits of character literals as follows:</p>
+
+<blockquote>
+  <p>All character literals must contain one code point in the valid Unicode range.  <code>[0 .. 0xD800)</code> and <code>[0xE000 .. 0x110000)</code></p>
+
+<p>If an ordinary character literals code point is less than or equal to 127 (it is in the ASCII range and representable as one UTF-8 code unit), its type is <code>char</code>, otherwise its type is <code>int</code>.  In both cases its value is its code point.</p>
+
+<p>For the remaining character literals types (u, U, L) the type is as per the standard (<code>char16_t</code>, <code>char32_t</code>, <code>wchar_t</code>), and ill-formed if the code point doesn't fit in a single code unit.</p>
+</blockquote>
+
+<p><code>L</code>/<code>wchar_t</code> is defined by the ABI (defined below) as 32 bits (UTF-32, same as <code>U</code>)</p>
+
+<h4>user-defined-character-literal</h4>
+
+<p>The same as for character-literal except extract the <code>ud-suffix</code> first</p>
+
+<h4>string-literal</h4>
+
+<p>First decode escape sequences (in non-raw literals) so that each <code>string-literal</code> are sequences of code points.</p>
+
+<p>You then need to consider maximal consequtive sequences of both kinds (user-defined and non-user-defined) together and apply the phase 6 rules about string concatenation.</p>
+
+<p>A <code>string-literal</code> without an encoding prefix is called an <em>ordinary string literal</em>.</p>
+
+<p>There are 4 <code>encoding-prefixes</code>: <code>u8</code> (UTF-8), <code>u</code> (UTF-16), <code>U</code> (UTF-32), <code>L</code> (UTF-32).</p>
+
+<p>We shall course define the rule for concatenating string literals as follows:</p>
+
+<blockquote>
+  <ul>
+<li>If a sequence of <code>string-literals</code> contains no encoding prefixes, the entire sequence is an treated as an ordinary string literal</li>
+<li>If a sequence of <code>string-literals</code> contains one of the four <code>encoding-prefixes</code>, the entire sequence shall use that prefix.</li>
+<li>If a sequence of <code>string-literals</code> contains two or more different types of the four <code>encoding-prefixes</code>, the program is ill-formed, output as <code>invalid</code>.</li>
+</ul>
+</blockquote>
+
+<p>Read 2.14.5.13 for clarification of this.</p>
+
+<p>Concatenate the sequences and append a terminating 0 code point.</p>
+
+<p>You will then need to UTF-8, UTF-16 or UTF-32 encode them as appropriate depending on the encoding prefix.  As our execution character set is UTF-8, ordinary string literals are UTF-8 (same as <code>u8</code>).</p>
+
+<p>The type is <code>array of &lt;n&gt; &lt;ch&gt;</code>, where <code>&lt;n&gt;</code> is the number of <strong>code units</strong> (not code points), including terminating 0 code point - and <code>&lt;ch&gt;</code> is the appropriate type (<code>char</code>, <code>char16_t</code>, <code>char32_t</code>, <code>wchar_t</code>)</p>
+
+<h4>user-defined-string-literal</h4>
+
+<p>The rules are similiar to <code>string-literal</code>, and in fact <code>user-defined-string-literals</code> and combined with normal <code>string-literals</code> as part of the maximal sequence.</p>
+
+<p>The rule about combining <code>ud-suffixes</code> is similiar to the one about <code>encoding-prefixes</code>.  The total number of <code>ud-suffix</code> types must be 0 or 1, or the program is ill-formed.  If it is 0 than it is a normal <code>string-literal</code>.  If it is 1 than it is a <code>user-defined-string-literal</code> of that type.</p>
+
+<p>Read 2.14.8.8 for clarification.</p>
+
+<h2>Testing / Reference Implementation</h2>
+
+<p>The test suite is similiar to PA1.  Execute:</p>
+
+<pre><code>$ make test
+</code></pre>
+
+<p>In order to deal with invalids and keep going, stderr is not included in the output.  It is placed in another file.  So the content of the tests directory is:</p>
+
+<pre><code>tests/123-test-name.t                // test stdin
+tests/123-test-name.ref              // reference impl stdout
+tests/123-test-name.ref.exit_status  // reference impl exit status
+tests/123-test-name.ref.stderr       // reference impl stderr
+tests/123-test-name.my               // your impl stdout
+tests/123-test-name.my.exit_status   // your impl exit status
+tests/123-test-name.my.stderr        // your impl stderr
+</code></pre>
+
+<p>If you add a test case:</p>
+
+<pre><code>tests/456-my-test-case.t
+</code></pre>
+
+<p>You can regenerate reference impl output with:</p>
+
+<pre><code>$ make ref-test
+</code></pre>
+
+<p>and then retest against it:</p>
+
+<pre><code>$ make test
+</code></pre>
+
+<p>However you should not modify existing tests or their reference output.</p>
+
+<h2>Definition: Fundamental Types</h2>
+
+<p>There are exactly 20 fundamental types in C++.</p>
+
+<p>They are:</p>
+
+<pre><code>signed char
+short int
+int
+long int
+long long int
+unsigned char
+unsigned short int
+unsigned int
+unsigned long int
+unsigned long long int
+wchar_t
+char
+char16_t
+char32_t
+bool
+float
+double
+long double
+void
+nullptr_t
+</code></pre>
+
+<p>Each fundamental type is different (distinct) from every other.</p>
+
+<p>The C++ standard does not specify exactly the size, alignment and representation of each of these types.</p>
+
+<p>This information is given in a separate document called the ABI (defined below).</p>
+
+<blockquote>
+  <p>Side note: In some cases the ABI specifies that two fundamental types have the same representation.  For example <code>char</code> vs <code>signed char</code>.  Also <code>wchar_t</code> vs <code>char32_t</code>.  However the toolchain must still treat them as different types (as will your bootstrap compiler).</p>
+</blockquote>
+
+<p>At this point please read the <em>C++ standard 3.9.1 Fundamental types</em>.</p>
+
+<h2>Definition: Linux x86-64 ABI</h2>
+
+<p>In order for the program produced by your toolchain to make system calls to the kernel, the size, alignment and representation of types needs to be agreed upon.</p>
+
+<p>The C/C++ standards do not specify exact representations of types, so a specification called the ABI (Application Binary Interface) is formed.</p>
+
+<p>The Linux x86-64 kernel adheres to an ABI specification called the "System V AMD64 ABI".  It is documented here:</p>
+
+<p><a href="http://www.cs.tufts.edu/comp/40/readings/amd64-abi.pdf">System V ABI AMD64 Architecture</a></p>
+
+<p>It is course defined that your toolchain shall implement this ABI.</p>
+
+<p>In particular:</p>
+
+<ul>
+<li>8-bit byte</li>
+<li>Multibyte types are stored byte-wise little-endian</li>
+<li>Signed integers are stored using 2s-compliment</li>
+<li>The size of the fundamental types is given in the Table 3.1 Scalar Types of the <a href="http://www.cs.tufts.edu/comp/40/readings/amd64-abi.pdf">ABI spec page 12</a></li>
+</ul>
+
+<p>For this assignment this dictates the hexdump of literals.</p>
+
+<h2>Definition: Simple Token Types</h2>
+
+<p>The course mapping for simple tokens is given below, and this has also been transcribed in the starter code:</p>
+
+<pre><code>simple alignas KW_ALIGNAS
+simple alignof KW_ALIGNOF
+simple and_eq OP_BANDASS
+simple and OP_LAND
+simple asm KW_ASM
+simple auto KW_AUTO
+simple bitand OP_AMP
+simple bitor OP_BOR
+simple bool KW_BOOL
+simple break KW_BREAK
+simple case KW_CASE
+simple catch KW_CATCH
+simple char16_t KW_CHAR16_T
+simple char32_t KW_CHAR32_T
+simple char KW_CHAR
+simple class KW_CLASS
+simple compl OP_COMPL
+simple const_cast KW_CONST_CAST
+simple constexpr KW_CONSTEXPR
+simple const KW_CONST
+simple continue KW_CONTINUE
+simple decltype KW_DECLTYPE
+simple default KW_DEFAULT
+simple delete KW_DELETE
+simple do KW_DO
+simple double KW_DOUBLE
+simple dynamic_cast KW_DYNAMIC_CAST
+simple else KW_ELSE
+simple enum KW_ENUM
+simple explicit KW_EXPLICIT
+simple export KW_EXPORT
+simple extern KW_EXTERN
+simple false KW_FALSE
+simple float KW_FLOAT
+simple for KW_FOR
+simple friend KW_FRIEND
+simple goto KW_GOTO
+simple if KW_IF
+simple inline KW_INLINE
+simple int KW_INT
+simple long KW_LONG
+simple mutable KW_MUTABLE
+simple namespace KW_NAMESPACE
+simple new KW_NEW
+simple noexcept KW_NOEXCEPT
+simple not_eq OP_NE
+simple not OP_LNOT
+simple nullptr KW_NULLPTR
+simple &amp; OP_AMP
+simple -&gt; OP_ARROW
+simple -&gt;* OP_ARROWSTAR
+simple = OP_ASS
+simple &amp;= OP_BANDASS
+simple | OP_BOR
+simple |= OP_BORASS
+simple : OP_COLON
+simple :: OP_COLON2
+simple , OP_COMMA
+simple ~ OP_COMPL
+simple -- OP_DEC
+simple / OP_DIV
+simple /= OP_DIVASS
+simple . OP_DOT
+simple ... OP_DOTS
+simple .* OP_DOTSTAR
+simple == OP_EQ
+simple operator KW_OPERATOR
+simple &gt;= OP_GE
+simple &gt; OP_GT
+simple ++ OP_INC
+simple &amp;&amp; OP_LAND
+simple &lt;% OP_LBRACE
+simple { OP_LBRACE
+simple &lt;= OP_LE
+simple ! OP_LNOT
+simple || OP_LOR
+simple ( OP_LPAREN
+simple &lt;&lt; OP_LSHIFT
+simple &lt;&lt;= OP_LSHIFTASS
+simple &lt;: OP_LSQUARE
+simple [ OP_LSQUARE
+simple &lt; OP_LT
+simple - OP_MINUS
+simple -= OP_MINUSASS
+simple % OP_MOD
+simple %= OP_MODASS
+simple != OP_NE
+simple + OP_PLUS
+simple += OP_PLUSASS
+simple ? OP_QMARK
+simple } OP_RBRACE
+simple %&gt; OP_RBRACE
+simple ) OP_RPAREN
+simple &gt;&gt; OP_RSHIFT
+simple &gt;&gt;= OP_RSHIFTASS
+simple :&gt; OP_RSQUARE
+simple ] OP_RSQUARE
+simple ; OP_SEMICOLON
+simple * OP_STAR
+simple *= OP_STARASS
+simple ^ OP_XOR
+simple ^= OP_XORASS
+simple or_eq OP_BORASS
+simple or OP_LOR
+simple private KW_PRIVATE
+simple protected KW_PROTECTED
+simple public KW_PUBLIC
+simple register KW_REGISTER
+simple reinterpret_cast KW_REINTERPET_CAST
+simple return KW_RETURN
+simple short KW_SHORT
+simple signed KW_SIGNED
+simple sizeof KW_SIZEOF
+simple static_assert KW_STATIC_ASSERT
+simple static_cast KW_STATIC_CAST
+simple static KW_STATIC
+simple struct KW_STRUCT
+simple switch KW_SWITCH
+simple template KW_TEMPLATE
+simple this KW_THIS
+simple thread_local KW_THREAD_LOCAL
+simple throw KW_THROW
+simple true KW_TRUE
+simple try KW_TRY
+simple typedef KW_TYPEDEF
+simple typeid KW_TYPEID
+simple typename KW_TYPENAME
+simple union KW_UNION
+simple unsigned KW_UNSIGNED
+simple using KW_USING
+simple virtual KW_VIRTUAL
+simple void KW_VOID
+simple volatile KW_VOLATILE
+simple wchar_t KW_WCHAR_T
+simple while KW_WHILE
+simple xor_eq OP_XORASS
+simple xor OP_XOR
+</code></pre>
+
+<h3>Design Tips (Optional)</h3>
+
+<p>These design tips are optional, and only suggest one way to complete this assignment.</p>
+
+<p>You can start by creating an implementation of <code>IPPTokenStream</code> from PA1, and connect up your PA1 code to it.</p>
+
+<p><code>emit_whitespace_sequence</code> and <code>emit_new_line</code> are no-ops.</p>
+
+<p>Apart from <code>string-literals</code> and <code>user-defined-string-literals</code> each <code>preprocessing-token</code> (<code>IPPTokenStream</code>) outputs exactly one token (maybe <code>invalid</code>).</p>
+
+<p><code>string-literals</code> and <code>user-defined-string-literals</code> need to be collected up into a sequence, terminated when you see some other token type.  Once terminated they are processed as one token.  You can implement <code>string-literals</code> first as one to one (outputing one token like the others), and then refactor in this string concatenation feature after.</p>
+
+<p>To output a token you can use the <code>DebugPostTokenOutputStream</code> class from the starter code.</p>
+
+<p>You will need to write UTF-8 and UTF-16 decoders and encoders for string and character literals.  Recall that UTF-32 encoding/decoding is trivial (UTF-32 code units are one-to-one with code points).</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

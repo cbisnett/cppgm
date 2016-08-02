@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 7 (nsdecl)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>nsdecl</code> that takes as input a set of C++ Source Files, executes translation phases 1 through 7, and describes the semantically analyzed translation units in the specified format.</p>
+
+<p>The behaviour of <code>nsdecl</code> is undefined if ANY of the following are true:</p>
+
+<ul>
+<li><p>A translation unit does not match pa7.gram</p></li>
+<li><p>The program is ill-formed, whether the standard requires a diagnostic or not.</p></li>
+<li><p>If a function has more than one entry in its overload set.</p></li>
+<li><p>If a name lookup occurs in a declaration after a qualified declarator-id (3.4.3p3 not required).</p></li>
+</ul>
+
+<h3>Prerequisites</h3>
+
+<p>You should complete Reading Assignment A before starting this assignment.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa7.git
+</code></pre>
+
+<p>It contains:</p>
+
+<ul>
+<li>a stub implementation of <code>nsdecl</code></li>
+<li>a compiled reference implementation <code>nsdecl-ref</code></li>
+<li>a test suite.</li>
+<li>a stdin/stdout wrapper for <code>nsdecl-ref</code> called <code>nsdecl-ref-stdin</code>.</li>
+<li>the grammar for this assignment called <code>pa7.gram</code></li>
+<li>a html grammar explorer of <code>pa7.gram</code> in the sub-directory <code>grammar/</code></li>
+</ul>
+
+<p>You will also want to reuse some of your PA6 solution.</p>
+
+<h3>Input / Command-Line Arguments</h3>
+
+<p>The same as PA6 <code>recog</code>.  Behaviour is undefined unless the command-line arguments match:</p>
+
+<pre><code>$ nsdecl -o &lt;outfile&gt; &lt;srcfile1&gt; &lt;srcfile2&gt; ... &lt;srcfileN&gt;
+</code></pre>
+
+<p>with the same relaxations as PA6</p>
+
+<h3>Output Format</h3>
+
+<p><code>nsdecl</code> shall write the following to <code>&lt;outfile&gt;</code>:</p>
+
+<p>The first line shall be:</p>
+
+<pre><code>&lt;n&gt; translation units
+</code></pre>
+
+<p>where <code>&lt;n&gt;</code> is the number of translation units.</p>
+
+<p>Following that, each translation unit shall be described in the order specified on the command-line.</p>
+
+<h4>Translation Unit Description</h4>
+
+<p>Each translation unit shall start with:</p>
+
+<pre><code>start translation unit &lt;srcfile&gt;
+</code></pre>
+
+<p>Where <code>&lt;srcfile&gt;</code> is the same as the command-line argument.</p>
+
+<p>The global namespace shall then be described.</p>
+
+<p>Each translation unit shall end with:</p>
+
+<pre><code>end translation unit
+</code></pre>
+
+<h4>Namespace Description</h4>
+
+<p>Each named namespace description shall start with:</p>
+
+<pre><code>start namespace &lt;name&gt;
+</code></pre>
+
+<p>Each unnamed namespace, and the global namespace, shall start with:</p>
+
+<pre><code>start unnamed namespace
+</code></pre>
+
+<p>If a namespace is inline the following line shall be:</p>
+
+<pre><code>inline namespace
+</code></pre>
+
+<p>Following shall be descriptions of member variables, functions and namespaces - in that order.</p>
+
+<p>Each of the three lists of entities shall be ordered in order of first declaration within the translation unit.</p>
+
+<p>Finally, each namespace description shall be terminated with:</p>
+
+<pre><code>end namespace
+</code></pre>
+
+<h4>Variable Description</h4>
+
+<p>Each declared variable (whether or not defined) shall be described on one line as follows:</p>
+
+<pre><code>variable &lt;name&gt; &lt;type&gt;
+</code></pre>
+
+<p>Where <code>&lt;name&gt;</code> is the unqualified variable name, and <code>&lt;type&gt;</code> is the description of the variables type.</p>
+
+<h4>Function Description</h4>
+
+<p>Each declared function (whether or not defined) shall be described on one line as follows:</p>
+
+<pre><code>function &lt;name&gt; &lt;type&gt;
+</code></pre>
+
+<p>Where <code>&lt;name&gt;</code> is the unqualified function name, and <code>&lt;type&gt;</code> is the description of the variables type.</p>
+
+<h4>Type Description</h4>
+
+<p>Fundamental Types shall be described in the canonical form given in PA2.  Specifically one of:</p>
+
+<pre><code>signed char
+short int
+int
+long int
+long long int
+unsigned char
+unsigned short int
+unsigned int
+unsigned long int
+unsigned long long int
+wchar_t
+char
+char16_t
+char32_t
+bool
+float
+double
+long double
+void
+nullptr_t
+</code></pre>
+
+<p>Compound types shall be described recursively as follows:</p>
+
+<pre><code>const T
+volatile T
+const volatile T
+pointer to T
+lvalue-reference to T
+rvalue-reference to T
+array of unknown bound of T
+array of N T
+function of (P1, P2, P3) returning R
+function of (P1, P2, P3, ...) returning R
+</code></pre>
+
+<p>Where T, P1, P2, ..., Pn and R are types and N is a positive integer</p>
+
+<h3>Error Handling</h3>
+
+<p>Behaviour of <code>nsdecl</code> is undefined if an error occurs.</p>
+
+<h3>Standard Output / Error</h3>
+
+<p>Standard output and standard error are ignored for <code>nsdecl</code>.</p>
+
+<h3>Features</h3>
+
+<p>You will need to implement the following features:</p>
+
+<ul>
+<li><p>typedef, variable and function declarations</p></li>
+<li><p>namespaces, both named and unnamed, and both noninline and inline.</p></li>
+<li><p>namespace aliases (<code>namespace foo = bar</code>), using declarations (<code>using a::b::c</code>), using directives (<code>using namespace foo</code>) and alias declarations (<code>using foo = bar</code>).</p></li>
+<li><p>unqualified and qualified name lookup in order to support typedef use, and qualified declaration matching.</p></li>
+</ul>
+
+<p>In this assignment <code>constant-expression</code> is used by array bound, but a pa7.gram <code>constant-expression</code> can only be a <code>TT_LITERAL</code> (a non-user-defined literal).  Which literals are semantically well-formed are described in 8.3.4:</p>
+
+<blockquote>
+  <p>[the literal bound shall be a] converted constant expression of type std::size_t and its value shall be greater than zero.</p>
+</blockquote>
+
+<p>As per the PA7 requirements only literals that satisfy this condition have defined behaviour for PA7.</p>
+
+<h3>Standard Revision</h3>
+
+<p>You will want to carefully review:</p>
+
+<ul>
+<li><em>3.4.1 Unqualified Name Lookup</em></li>
+<li><em>3.4.3 Qualified Name Lookup</em></li>
+<li><em>7.1.6.1 The Cv-Qualfiers</em></li>
+<li><em>7.1.6.2 Simple Type Specifiers</em></li>
+<li><em>7.3 Namespaces</em></li>
+<li><em>8.3 Meaning Of Declarators</em></li>
+</ul>
+
+<p>However other parts of the standard will come into play as well.  Reading these sections alone is not a substitute for completing RAA.</p>
+
+<h3>Design Notes (Optional)</h3>
+
+<p>There are several building blocks you will need to implement.</p>
+
+<p>Firstly you will need to model and pass around type information within the compiler.  One way is to create a base class <code>Type</code> to represent the different possible types, then derive each type category from that.</p>
+
+<p>Thereafter you may want to similarly model entities (objects, references, functions, namespaces, etc), with a base class <code>Entity</code>.</p>
+
+<p>For this assignment there is only one type of scope, that being namespace scope.  Recall that the global namespace is itself a namespace.  Other types of scopes (including function prototype scope), can be disregarded for PA7.</p>
+
+<p>A scope contains a map from names to entities.  For this assignment you can just store this map in your Namespace object.</p>
+
+<p>Thereafter you will want to go through PA7.gram and either using your PA6 parser as a prototype or an abstract base, create semantic actions in the parser that will construct and modify appropriate model objects.  For example, if you encounter a simple declaration of a new variable, you may construct a Variable object and add it to the current Namespace object.</p>
+
+<p>When you encounter a name in a declaration you will need to implement name lookup.  The Namespaces that need to be searched for a name, and in what order, are described in 3.4.  Inline namespaces and using directives have different rules depending on whether you are doing an unqualified lookup (a name <code>A</code>, or the <code>B</code> in <code>B::C::D</code>), or doing qualified lookup (the <code>C</code> in <code>B::C::D</code>).  Also different name lookup contexts may only find certain types of names (for example only namespaces, or only types), so you may want to parameterize your name lookup code with a filter parameter.</p>
+
+<p>Linking is not required for this assignment.  Each translation unit can be semantically analyzed separately with no interaction between them.  In a later assignment you will need to analyze linkage and determine when two names from two different translation units should name the same entity.</p>
+
+<p>The recommended overall structure of your <code>nsdecl</code> application is to parse each translation unit into an object model, and then walk the object model in the given order to create the output format.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

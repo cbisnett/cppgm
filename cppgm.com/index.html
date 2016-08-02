@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+
+		<div id="top">
+			<h2>C++ Grandmaster Certification</h2>
+			<div id="menu">
+				<ul>
+					<li><a href="index.html" class="current">home</a></li>
+					<li><a href="http://forum.cppgm.org">forum</a></li>
+					<li><a href="about.html">about</a></li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="content">
+
+		<div id="left">
+	<p>
+
+
+	<h2>Prospective Students</h2>
+
+	<ul>
+	<li> <a href="about.html">What is the C++ Grandmaster Certification? (About/FAQ) </a> </li>
+	<li> <a href="preregister.html">Pre-register to be notified when enrollments open for next run.</a> </li>
+	</ul>
+
+	<h2>Current Students: C++ Grandmaster I (2013-2014)</h2>
+
+<p>In part 1 of the course you will develop a series of components corresponding to all nine phases of translation of C++.  You will also exhaustively study the complete latest C++ specification (including the core language and standard library), and be required to submit a written assignment on the material.<p>
+
+<table style="border:1px solid black; padding: 3px; width: 100%">
+	<tr>
+		<td>Assignment</td>
+		<td>Codename</td>
+		<td>Deadline*</td>
+		<td>Forum</td>
+		<td>Submit/Grading</td>
+	</tr>
+	<tr>
+		<td><a href="pa1.html">Programming Assignment 1</a></td>
+		<td>pptoken</td>
+		<td>3 June 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa1">pa1 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa2.html">Programming Assignment 2</a></td>
+		<td>posttoken</td>
+		<td>3 June 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa2">pa2 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa3.html">Programming Assignment 3</a></td>
+		<td>ctrlexpr</td>
+		<td>14 July 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa3">pa3 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa4.html">Programming Assignment 4</a></td>
+		<td>macro</td>
+		<td>14 July 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa4">pa4 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa5.html">Programming Assignment 5</a></td>
+		<td>preproc</td>
+		<td>14 July 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa5">pa5 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa6.html">Programming Assignment 6</a></td>
+		<td>recog</td>
+		<td>22 Sept 2013</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa6">pa6 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="raa.html">Reading Assignment A</a></td>
+		<td>core</td>
+		<td>12 Feb 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:raa">raa forum</a></td>
+		<td>assessed by wai</td>
+	</tr>
+	<tr>
+		<td><a href="pa7.html">Programming Assignment 7</a></td>
+		<td>nsdecl</td>
+		<td>12 Feb 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa7">pa7 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="pa8.html">Programming Assignment 8</a></td>
+		<td>nsinit</td>
+		<td>12 Feb 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa8">pa8 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="rab.html">Reading Assignment B</a></td>
+		<td>target</td>
+		<td>6 April 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:rab">rab forum</a></td>
+		<td>self-assessed</td>
+	</tr>
+	<tr>
+		<td><a href="pa9.html">Programming Assignment 9</a></td>
+		<td>cy86</td>
+		<td>6 April 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:pa9">pa9 forum</a></td>
+		<td><a href="submit.html">submit</a></td>
+	</tr>
+	<tr>
+		<td><a href="rac.html">Reading Assignment C</a></td>
+		<td>stdlib</td>
+		<td>30 June 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:rac">rac forum</a></td>
+		<td>assessed by wai</td>
+	</tr>
+	<tr>
+		<td><a href="wai.html">Written Assignment I</a></td>
+		<td>cheatsheet</td>
+		<td>3 Aug 2014</td>
+		<td><a href="http://forum.cppgm.org/questions/tags:wai">wai forum</a></td>
+		<td>see description</td>
+	</tr>
+</table>
+</p>
+<p>
+<ul>
+<li><b>(*) All deadlines are at 11:59pm PST on the given date</b>
+</ul>
+</p>
+	<h2>C++ Grandmaster II</h2>
+	<p><b>Start Date: TBD</b></p>
+	<p>In part 2 of the course you will combine the components you developed in part 1, fill out the semantic analysis phase with remaining language features, implement your standard library, bootstrap a self-hosting build and pass the final conformance test suite.</p>
+<p>		
+			
+		<ul>
+		<li><a href="http://groups.google.com/group/cppgm-dev">Current Student Announcements (cppgm-dev)</a></li>
+		<li><a href="http://forum.cppgm.org">Support Forum (forum.cppgm.org)</a></li>
+		<li><a href="honorcode.html">Honor Code</a></li>
+		<li><a href="submit.html">Submit Solution For Grading</a></li>
+		</ul>
+</p>
+		
+		</div>
+
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

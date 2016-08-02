@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+<div id="top">
+	<h2>C++ Grandmaster Certification</h2>
+	<div id="menu">
+		<ul>
+			<li><a href="index.html">home</a></li>
+			<li><a href="http://forum.cppgm.org">forum</a></li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+<h2>CPPGM Programming Assignment 1 (pptoken)</h2>
+
+<h3>Overview</h3>
+
+<p>Write a C++ application called <code>pptoken</code> that accepts a <em>C++ Source File</em> on standard input, executes phases 1, 2 and 3 of the <em>Phases of Translation</em> (defined below), and describes the resulting sequence of <code>preprocessing-tokens</code> to standard output in the specified format.</p>
+
+<h3>Definition: Phases of Translation</h3>
+
+<p>The overall process of taking source files and producing compiled programs is broken down into 9 phases of translation.</p>
+
+<p>Translation phase 4 is called <em>preprocessing</em>.  The preprocessing phase applies preprocessing directives like <code>#include</code>, <code>#define</code>, <code>#ifdef</code>, and so on.</p>
+
+<p>The <em>preprocessing</em> phase takes as input a stream of <code>preprocessing-tokens</code>.  Phases 1 through 3 are about taking a physical source file and decomposing it into those tokens.  They are essentially the "preprocessors tokenizer".</p>
+
+<p>It is your task in this assignment to implement these first three phases.  The <code>pptoken</code> application is a wrapper for them to fit the provided test suite.</p>
+
+<p>Please read <em>Clause 2: Lexical Conventions</em> (pages 16 through 32) of <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3485.pdf">the C++ standard (Nov 12 Working Draft - N3485)</a>.</p>
+
+<h3>Starter Kit</h3>
+
+<p>The starter kit can be obtained from:</p>
+
+<pre><code>$ git clone git://git.cppgm.org/pa1.git
+</code></pre>
+
+<p>It contains a stub implementation of pptoken, a compiled reference implementation and a test suite.</p>
+
+<h3>Input Format</h3>
+
+<p>The C++ Source File shall be read from standard input <code>std::cin</code> in UTF-8 format.</p>
+
+<p>The <em>source character set</em> and the <em>execution character set</em> shall be <em>course defined</em> (defined below) as UTF-8.  Line endings are UNIX - a single LF (0x0A).</p>
+
+<h3>Definition: UTF-8</h3>
+
+<p>If you already know how a Unicode code point is encoded and decoded into UTF-8, UTF-16, and UTF-32, then you can skip this definition.</p>
+
+<p>The Unicode character set includes almost every character from every human language.</p>
+
+<p>Each character in the Unicode character set has been assigned an integer, called its <em>code point</em>.</p>
+
+<p>Code points can range from a minimum of 0 to a maximum of 0x10FFFF</p>
+
+<p>For example:</p>
+
+<ul>
+<li>the english letter A has a code point of 0x41</li>
+<li>the greek letter π has a code point of 0x3C0</li>
+<li>the musical symbol 𝄞 has a code point of 0x1D11E</li>
+</ul>
+
+<p>In order to store <em>one code point</em> we encode it into a sequence of <em>one or more fixed-width code units</em>.</p>
+
+<ul>
+<li>UTF-8 is an encoding scheme that uses 8 bit wide code units</li>
+<li>UTF-16 is an encoding scheme that uses 16 bit wide code units</li>
+<li>UTF-32 is an encoding scheme that uses 32 bit wide code units</li>
+</ul>
+
+<p>The simplest way is to store each code point is in its own single code unit.  Of the three schemes only UTF-32 has a large enough code unit (32 bits) to hold any code point in one code unit.  UTF-32 effectively means storing each code point in a 32-bit integer.</p>
+
+<p>The remaining two ways (UTF-8 and UTF-16) use a variable length encoding.  Each code point is transformed into one or more code units.</p>
+
+<p>Two simple bit manipulation algorithms are specified for UTF-8 and UTF-16 respectively to calculate the code point from a sequence of code units (and visa-versa).</p>
+
+<p>The two algorithms are described here:</p>
+
+<ol>
+<li><a href="http://tools.ietf.org/html/rfc3629#page-4">UTF-8: http://tools.ietf.org/html/rfc3629#page-4</a></li>
+<li><a href="http://tools.ietf.org/html/rfc2781#section-2">UTF-16: http://tools.ietf.org/html/rfc2781#section-2</a></li>
+</ol>
+
+<h3>Error Reporting</h3>
+
+<p>If an error occurs in <code>pptoken</code> you should print a helpful error message to <code>std::cerr</code> and <code>main</code> should <code>return EXIT_FAILURE</code>.  The test harness will interpret <code>EXIT_FAILURE</code> as indicating that the C++ Source File is <em>ill-formed</em>.</p>
+
+<p>Internally you may throw an exception and put a catch handler in <code>main</code> that then returns failure.  The skeleton code is already setup like this.</p>
+
+<h3>Development Environment</h3>
+
+<p>The grading servers run on <em>Ubuntu 12.10 64-bit</em> with the default Ubuntu server packages and only additionally the <code>build-essential</code> package installed as a bootstrap toolchain:</p>
+
+<pre><code>$ sudo apt-get install build-essential
+</code></pre>
+
+<p>It is recommended that you setup your developer machine with an identical environment.</p>
+
+<h3>Restrictions</h3>
+
+<p>You may only depend upon the C++ standard library and what is already included in this skeleton code.  No additional third party libraries/tools dependencies may used.</p>
+
+<p>You may not submit intermediate computer-generated code.  (You may submit original source code for a tool that is built and generates code during the build process - although that is <em>not recommended</em> for this assignment.)</p>
+
+<p>We require that you agree to not publish your solution to this programming assignment as a condition of taking this assignment.  You are free to discuss the design in general terms, but please do not share code.</p>
+
+<h3>Output Format</h3>
+
+<p><code>pptoken</code> shall write to standard output the following in UTF-8 format:</p>
+
+<p>For each token in the sequence, one line shall be printed consisting of 3 space-character separated elements.</p>
+
+<p>The first element is the <em>Token Type</em> (defined below).  The next is an integer N which is the byte length of the <em>Token Data</em> (defined below).  The last is the N bytes of the Token Data.</p>
+
+<p>At the end of the output <code>pptoken</code> should print <code>eof</code> on a line by itself.</p>
+
+<p>There is an interface and implementation in the skeleton code you can use, called <code>IPPTokenStream</code> and <code>DebugPPTokenStream</code> respectively, that will produce the correct output format for you.</p>
+
+<h3>Definition: Course Defined</h3>
+
+<p>In the standard there are a number of cases that are called <em>implementation defined</em>, meaning it is up to the toolchain author what to choose in that case.</p>
+
+<p>In some of those cases we will define them as the same for everybody taking this course.  We will say such a case is <em>course defined</em>.</p>
+
+<p>In the remaining cases, it is up to each participant to choose for themselves.</p>
+
+<h3>Features</h3>
+
+<p>Several transformations will need to be applied in a pipeline as described in section 2.2.{1,2,3} of the standard.  The following summary is given as a rough reference:</p>
+
+<p>Decode each UTF-8 code unit sequence from the input file to its unicode code point.</p>
+
+<p>Convert any <code>universal-character-names</code> (escape sequences <code>\uXXXX</code> and <code>\UXXXXXXXX</code>) into their unicode code point.</p>
+
+<p>The nine three-character trigraphs sequences should be replaced using their single-character equivalents:</p>
+
+<pre><code>??=  --&gt;  #
+??/  --&gt;  \
+??'  --&gt;  ^
+??(  --&gt;  [
+??)  --&gt;  ]
+??!  --&gt;  |
+??&lt;  --&gt;  {
+??&gt;  --&gt;  }
+??-  --&gt;  ~
+</code></pre>
+
+<p>Line Splicing: If you encounter a backslash followed by a linefeed, ignore it.</p>
+
+<p>If the file does not end in a linefeed add one.</p>
+
+<p>Comments (<code>/* ... */</code> and <code>// ...</code>) are replaced by a space character (ie they are part of a non-empty <code>whitespace-sequence</code>)</p>
+
+<p>Finally decompose the source file into a sequence of tokens of the following types:</p>
+
+<pre><code>whitespace-sequence
+new-line
+header-name
+identifier
+pp-number
+character-literal
+user-defined-character-literal
+string-literal
+user-defined-string-literal
+preprocessing-op-or-punc
+non-whitespace-character
+</code></pre>
+
+<p>We have synthesized <code>whitespace-sequence</code> and <code>new-line</code>, they are not defined explicitly in the standard.  They will be significant in preprocessing so it is useful to deal with them as part of the token stream.</p>
+
+<p>A <code>whitespace-sequence</code> is a maximal sequence of whitespace characters <em>not including line feeds</em>, (which effectively also includes comments)</p>
+
+<p>A <code>new-line</code> is an LF (0x0A) character.</p>
+
+<p>The remaining 9 token types correspond to the 9 bodies of the <code>preprocessing-token</code> productions.</p>
+
+<h3>Definition: Token Type:</h3>
+
+<p>The token type is a string, one of:</p>
+
+<pre><code>whitespace-sequence
+new-line
+header-name
+identifier
+pp-number
+character-literal
+user-defined-character-literal
+string-literal
+user-defined-string-literal
+preprocessing-op-or-punc
+non-whitespace-character
+</code></pre>
+
+<h3>Definition: Token Data:</h3>
+
+<p>The following token types have empty token data:</p>
+
+<pre><code>whitespace-sequence
+new-line
+</code></pre>
+
+<p>The remaining token types show the UTF-8 encoded sequence of the content they correspond to.</p>
+
+<h3>Example Output</h3>
+
+<p>For example the source file:</p>
+
+<pre><code>foo 1.0e2 *=@ /* bar */ "baz"
+</code></pre>
+
+<p>Produces an output of:</p>
+
+<pre><code>identifier 3 foo
+whitespace-sequence 0 
+pp-number 5 1.0e2
+whitespace-sequence 0 
+preprocessing-op-or-punc 2 *=
+non-whitespace-character 1 @
+whitespace-sequence 0
+string-literal 5 "baz"
+new-line 0 
+eof
+</code></pre>
+
+<h2>Testing</h2>
+
+<p>To execute the local test suite simply issue the command:</p>
+
+<pre><code>$ make test
+</code></pre>
+
+<p>This will build <code>pptoken</code>, run each test against it, then compare the results against the reference implementation.</p>
+
+<p>Each test input has a filename like <code>tests/NNN-foo.t</code></p>
+
+<p><code>NNN</code> is a number representing the test complexity. <code>foo</code> is a descriptive name of the test.</p>
+
+<p>The reference output is given in:</p>
+
+<p><code>tests/NNN-foo.ref</code></p>
+
+<p>and the reference exit status is given in:</p>
+
+<p><code>tests/NNN-foo.ref.exit_status</code></p>
+
+<p>The output of your version is given in:</p>
+
+<p><code>tests/NNN-foo.my</code></p>
+
+<p>and the exit status of your version is given in:</p>
+
+<p><code>tests/NNN-foo.my.exit_status</code></p>
+
+<p>So you can diff the files to determine why a test is failing.</p>
+
+<p>When you execute the test suite it will execute them in order and stop with an error on the first failed test.</p>
+
+<h2>Reference Implementation</h2>
+
+<p>There is a compiled reference implementation called <code>pptoken-ref</code> of <code>pptoken</code> in the starter kit than you can use to generate arbitrary reference output for comparison to your implementation.</p>
+
+<p>If you find a bug in the reference implementation (an inconsistency of its output to what is described in this document or the standard) than please report it to the forum.  Make sure to include the output of <code>./pptoken-ref -v</code>.</p>
+
+<h2>Submitting Your Implementation For Grading</h2>
+
+<p>We will provide an interface that will allow you to submit your solution for grading closer to the due date.  Instructions will be made available on the main course site.</p>
+
+<h2>Preprocessing Token Grammar Summary</h2>
+
+<p>The grammar for <code>preprocessing-token</code> is as follows with some notes added.  It is functionally equivalent to the way it is presented in the standard, and mostly uses the same names:</p>
+
+<pre><code>preprocessing-token:
+    identifier
+    pp-number
+    character-literal
+    user-defined-character-literal
+    string-literal
+    user-defined-string-literal
+    preprocessing-op-or-punc
+    header-name
+    non-whitespace-character
+
+non-whitespace-character:
+    any single non-whitespace code point that does
+            not fit into another preprocessing token
+            except `'` and `"`
+</code></pre>
+
+<p>This is used so that garbage will still tokenize in some cases because the section it contains may be removed later anyway during preprocessing (by exclusion from an <code>#if 0</code> or similar).  The test suite (as is the standard) is quite forgiving about whether a malformed token causes an error or gets parsed using <code>non-whitespace-character</code>.</p>
+
+<p>It is <em>course defined</em> that <code>'</code> and <code>"</code> do not match <code>non-whitespace-character</code>. This is a standard-compliant feature (see 2.5.2).</p>
+
+<pre><code>identifier:
+    identifier-nondigit
+    identifier identifier-nondigit
+    identifier digit
+
+identifier-nondigit:
+    nondigit
+    code points in Annex E1
+</code></pre>
+
+<p>An identifier may not start with code points from Annex E2.</p>
+
+<pre><code>nondigit: one of
+    `a` `b` `c` `d` `e` `f` `g` `h` `i` `j` `k` `l` `m`
+    `n` `o` `p` `q` `r` `s` `t` `u` `v` `w` `x` `y` `z`
+    `A` `B` `C` `D` `E` `F` `G` `H` `I` `J` `K` `L` `M`
+    `N` `O` `P` `Q` `R` `S` `T` `U` `V` `W` `X` `Y` `Z` `_`
+
+digit: one of
+    `0` `1` `2` `3` `4` `5` `6` `7` `8` `9`
+
+pp-number:
+    digit
+    `.` digit
+    pp-number digit
+    pp-number identifier-nondigit
+    pp-number `e` sign
+    pp-number `E` sign
+    pp-number `.`
+
+sign:
+    `+`
+    `-`
+
+character-literal:
+    `'` c-char-sequence `'`
+    `u'` c-char-sequence `'`
+    `U'` c-char-sequence `'`
+    `L'` c-char-sequence `'`
+
+c-char-sequence:
+    c-char
+    c-char-sequence c-char
+
+c-char:
+    any code point except `'`, `\`, or new-line
+    escape-sequence
+
+escape-sequence:
+    simple-escape-sequence
+    octal-escape-sequence
+    hexadecimal-escape-sequence
+
+simple-escape-sequence: one of
+    `\'` `\"` `\?` `\\` `\a` `\b` `\f` `\n` `\r` `\t` `\v`
+
+octal-escape-sequence:
+    `\` octal-digit
+    `\` octal-digit octal-digit
+    `\` octal-digit octal-digit octal-digit
+
+octal-digit: one of
+    `0` `1` `2` `3` `4` `5` `6` `7`
+
+hexadecimal-escape-sequence:
+    `\x` hexadecimal-digit
+    hexadecimal-escape-sequence hexadecimal-digit
+
+hexadecimal-digit: one of
+    `0` `1` `2` `3` `4` `5` `6` `7` `8` `9`
+    `a` `b` `c` `d` `e` `f`
+    `A` `B` `C` `D` `E` `F`
+
+user-defined-character-literal:
+    character-literal ud-suffix
+
+ud-suffix:
+    identifier
+
+string-literal:
+    `""`
+    `"` s-char-sequence `"`
+    `R` raw-string
+    encoding-prefix `""`
+    encoding-prefix `"` s-char-sequence `"`
+    encoding-prefix `R` raw-string
+
+s-char-sequence:
+    s-char
+    s-char-sequence s-char
+
+s-char:
+    any code point except `"`, `\`, new-line
+    escape-sequence
+
+encoding-prefix:
+    `u8`
+    `u`
+    `U`
+    `L`
+
+raw-string:
+    `"` d-char-sequence `(` r-char-sequence `)` d-char-sequence `"`
+</code></pre>
+
+<p>Note that in a raw string most of the early translations are switched off (see 2.5.3.1 and 2.14.5 in the standard).</p>
+
+<pre><code>d-char-sequence:
+    d-char
+    d-char-sequence d-char
+
+d-char:
+    any code point except space, `(`, `)`, `\`, horizontal tab,
+        vertical tab, form feed, and newline.
+
+r-char-sequence:
+    r-char
+    r-char-sequence r-char
+
+r-char:
+    any code point, except a sequence that is
+        a right parenthesis `)` followed by the initial
+        d-char-sequence (which may be empty) followed
+        by a double quote `"`.
+
+user-defined-string-literal:
+    string-literal ud-suffix
+
+preprocessing-op-or-punc: one of
+    `{` `}` `[` `]` `#` `##` `(` `)` `&lt;:` `:&gt;` `&lt;%` `%&gt;` `%:` `%:%:` `;` `:` `...`
+    `new` `delete` `?` `::` `.` `.*` `+` `-` `*` `/` `%` `ˆ` `&amp;` `|` `~` `!` `=` `&lt;` `&gt;`
+    `+=` `-=` `*=` `/=` `%=` `ˆ=` `&amp;=` `|=` `&lt;&lt;` `&gt;&gt;` `&gt;&gt;=` `&lt;&lt;=` `&lt;=` `&gt;=` `&amp;&amp;` `==` `!=`
+    `||` `++` `--` `,` `-&gt;*` `-&gt;` `and` `and_eq` `bitand` `bitor` `compl`
+    `not` `not_eq` `or` `or_eq` `xor` `xor_eq`
+
+header-name:
+    `&lt;` h-char-sequence `&gt;`
+    `"` q-char-sequence `"`
+</code></pre>
+
+<p><code>header-names</code> are context sensetive.  They should only be tokenized after a sequence of (start of file or <code>new-line</code>) (<code>#</code> or <code>%:</code>) <code>include</code> ...disregarding <code>whitespace-sequences</code>.  Read section 16.2 in the standard to understand what is going on here.</p>
+
+<pre><code>h-char-sequence:
+    h-char
+    h-char-sequence h-char
+
+h-char:
+    any code point except new-line and `&gt;`
+
+q-char-sequence:
+    q-char
+    q-char-sequence q-char
+
+q-char:
+    any member of the source character set except new-line and `"`
+
+universal-character-name:
+    `\u` hex-quad
+    `\U` hex-quad hex-quad
+
+hex-quad:
+    hexadecimal-digit hexadecimal-digit hexadecimal-digit hexadecimal-digit
+</code></pre>
+
+<h3>Design Notes (Optional)</h3>
+
+<p>There are many ways to design <code>pptoken</code> and we will describe in general terms one way to write <code>pptoken</code>.  We make no claims that this is the best way by any metric. You are free to use this design or you are free to ignore this and do it your own way.</p>
+
+<p>Read chapter 3 of the dragon book if you have it.</p>
+
+<p><code>pptoken</code> can be broken into two parts.  First there is the translation tasks, then there is the tokenization task.</p>
+
+<p>The translation tasks are:</p>
+
+<ul>
+<li>UTF8 decoding</li>
+<li>universal character name decoding</li>
+<li>trigraph decoding</li>
+<li>line splicing</li>
+<li>file terminating line-ending</li>
+</ul>
+
+<p>Implement each of these in a pipeline.  These should result in a stream of code points you can store in <code>int</code>.  It makes it easy to add a code point <code>-1</code> to represent the end of the file.  Each part of the pipeline can be implemented as a state machine that takes one code point at a time and returns zero or more code points.</p>
+
+<p>In order to support raw mode in raw string literals it is necessary to be able to turn this on and off, bypassing the pipeline when entering into tokenization of a raw string literal and restoring it on exit.</p>
+
+<p>Now we describe the tokenization part.</p>
+
+<p>Start by drawing a DFA (deterministic finite automaton) for each token type.  Recall that a DFA is a directed graph where the vertexes are states and the edges are code points (or sets of code points).</p>
+
+<p>We will briefly mention each type:</p>
+
+<pre><code>new-line
+</code></pre>
+
+<p>This is trivial.  There are two states, the start state and end state.  The edge is a line feed.</p>
+
+<pre><code>identifier
+</code></pre>
+
+<p>An identifier also has two states.  From the start state to end state is an edge with all leading characters (<code>nondigit</code> and everything from Annex E1 minus E2).  Connecting the end state back to itself is another edge with all allowable identifier body characters (<code>nondigit</code> and <code>digit</code> and E1).</p>
+
+<pre><code>pp-number
+</code></pre>
+
+<p><code>pp-number</code> has a similar structure to identifier with a few more states.</p>
+
+<pre><code>character-literal
+</code></pre>
+
+<p>Once again just follow the grammar.</p>
+
+<pre><code>user-defined-character-literal
+</code></pre>
+
+<p>The is a character literal followed by an idenitifier, so you can just chain those two together.</p>
+
+<pre><code>string-literal
+</code></pre>
+
+<p>Similar to character-literal, except for raw string.  Raw string literals require special treatment in two ways.  First they need to go into a <em>raw mode</em> and turn off the early translations.  Secondly they terminate in an unusual way.  The standard provides us some leeway by saying than anything up to an opening <code>"</code> that could start a raw string literal (eg <code>R"</code>) will be a raw string literal.</p>
+
+<pre><code>user-defined-string-literal
+</code></pre>
+
+<p>Effectively a <code>string-literal</code> and an <code>identifier</code> chained together.</p>
+
+<pre><code>preprocessing-op-or-punc
+</code></pre>
+
+<p>For the identifier-like operators just ignore them for now.  You can emit them from the identifier DFA by checking them against a <code>set&lt;string&gt;</code>.  For example: Let <code>not_eq</code> be initially tokenized as an identifier, but before you emit it, check if they are in the set of indentifier-like operators.  If it is, emit it as a <code>preprocessing-op-or-punc</code> instead of <code>identifier</code>.</p>
+
+<p>For the rest form a DFA.  It will have many states.  Maybe separate it out into different diagrams for each leading character.</p>
+
+<p>For example a leading character of <code>&lt;</code> could result in <code>&lt;&lt;</code>, <code>&lt;%</code>, <code>&lt;=</code>, <code>&lt;&lt;=</code>, <code>&lt;:</code>.  If we see another <code>&lt;</code> (so <code>&lt;&lt;</code> so far) we still need a third state to decide between <code>&lt;&lt;=</code> and <code>&lt;&lt;</code>.</p>
+
+<p>Also note that there is a special exception involving the sequence <code>&lt;::</code>:</p>
+
+<blockquote>
+  <p>2.5.3: ...if the next three characters are <code>&lt;::</code> and the subsequent character is neither <code>:</code> nor <code>&gt;</code>, the <code>&lt;</code>
+is treated as a preprocessor token by itself and not as the first character of the alternative token <code>&lt;:</code></p>
+</blockquote>
+
+<p>One way to deal with this by adding three surrogate operators <code>&lt;::</code>, <code>&lt;::&gt;</code> and <code>&lt;:::</code> to your DFA, and when you find one of these, rather than emiting them as one token, emit the two appropriate for each case.  You may need to reread 2.5.3 a couple of times before this is clear.</p>
+
+<pre><code>whitespace-sequence
+</code></pre>
+
+<p>We recommend subsuming comments into this production rather than replacing them with a single space.  The start and end states should be connected by non-new-line whitespace.  If you encounter <code>/</code> followed by <code>*</code>, enter <em>inline comment state</em>; if you encounter <code>/</code> followed by <code>/</code>, enter <em>single line comment state</em>.  Exit them as described in the standard.</p>
+
+<pre><code>header-name
+</code></pre>
+
+<p>This is straightforward, just follow the grammar.  However, it should only be considered in certain contexts as described earlier.</p>
+
+<pre><code>each non-white-space character that cannot be one of the above
+</code></pre>
+
+<p>This is simple.  If you cannot tokenize a sequence, just emit each code point in this category.  We will also permit (as does the standard) to simply error in many of these cases.</p>
+
+<p>Now that you have all the DFAs you will combine them into a single state machine with look-ahead.  The state machine starts in the <code>start</code> state.  It will receive the stream of code points from the translation tasks.  Based on the look-ahead it will enter one of the DFAs above.  In some cases there will still be ambiguity so you will need to make a decision based on look-ahead.  For example <code>u8</code> can be an identifier, it can also be the <code>encoding-prefix</code> of a <code>string-literal</code>.  So, at the end of identifier <code>u8</code>, if the look-ahead is <code>"</code> then enter the <code>string-literal</code> DFA, otherwise emit <code>u8</code> as an <code>identifier</code> and return to the <code>start</code> state.  Similarly at the end of <code>character-literal</code>, if the look-ahead is a valid <code>identifier</code> start, than enter <code>user-defined-character-literal</code>, otherwise emit the <code>character-literal</code>.</p>
+
+<p>Also, there is some cross-over between <code>whitespace-sequence</code> comment starts <code>//</code>, and <code>/*</code> and the divide and divide-assign operators <code>/</code> and <code>/=</code>.  You can deal with that by combining the DFAs.  For example you might create a state <code>forward-slash</code> that indicates the last seen code point is <code>/</code>, then based on lookahead either enter the operator DFA or the whitespace/comment DFA.</p>
+
+<p>Usually you will need to match the longest token (some exceptions are comments, raw strings and the <code>&lt;</code> <code>::</code> case).  So greedily "keep going" in the state machine until you cannot go and further, then emit the discovered token and return to the start state.</p>
+
+<p>To emit a token there is an interface provided in the skeleton code called <code>IPPTokenStream</code>.  It has one function for each token type.  In most cases you will need to store and then UTF-8 encode the code point sequence corresponding to the token to pass to the data argument.  The token data is expected to have the translation tasks applied (for one example <em>line splicing</em>), but not the literal tasks (for example decoding <code>simple-escape-sequences</code> is not required at this stage) (which occur later in translation phase 7 and is not part of this assignment).</p>
+
+<h3>Self-Tokenizing (Optional/Ungraded)</h3>
+
+<p>To get into the self-hosting spirit of things, once you have completed this assignment run your <code>pptoken</code> application using your <code>pptoken.cpp</code> source file as input:</p>
+
+<pre><code>$ .pptoken &lt; pptoken.cpp &gt; pptoken.my
+</code></pre>
+
+<p>And compare by hand some of the <code>pptoken.cpp</code> file to the output in <code>pptoken.my</code> to check it tokenized correctly.</p>
+
+	</div>
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>

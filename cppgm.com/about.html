@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="author" content="CPPGM" />
+<meta name="description" content="C++ Grandmaster Certificaiton [CPPGM]" />
+<meta name="keywords" content="c++" />
+<title>C++ Grandmaster Certification [CPPGM]</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	media="screen" />
+<link rel="shortcut icon" href="favicon.ico" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+		
+		function enrolled(data, textStatus, jqXHR)
+		{
+			alert("You have successfully enrolled in the course.");
+		}
+		
+		function enroll_error(jqXHR, textStatus, errorThrown)
+		{
+			alert("An error occured while trying to enroll.  Please try again later. (" + textStatus + " : " + errorThrown + ")");	
+		}
+		
+		function enroll(first_name, last_name, email_address)
+		{
+			if (first_name.length < 1)
+				alert("Please fill in the First Name field.");
+			else if (last_name.length < 1)
+				alert("Please fill in the Last Name field.");
+			else if (email_address.search("@") == -1)
+				alert("Please fill in a valid Email Address.");
+			else
+				$.ajax({ url: "enroll", type: "POST", data: {"first_name" : first_name, "last_name" : last_name, "email_address" : email_address},
+					error: enroll_error, success: enrolled, dataType: "json", contentType : "application/x-www-form-urlencoded" });
+		}
+		
+		function submit_enrollment(x)
+		{
+			enroll(x.first_name.value, x.last_name.value, x.email_address.value);
+			return false;
+		}
+		
+	</script>
+</head>
+
+<body>
+	
+
+	<div id="wrap">
+
+		<div id="top">
+			<h2>C++ Grandmaster Certification</h2>
+			<div id="menu">
+				<ul>
+					<li><a href="index.html">home</a></li>
+					<li><a href="http://forum.cppgm.org">forum</a></li>
+					<li><a href="about.html" class="current">about</a></li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="content">
+			<div id="left">
+
+				<p><b>Important News 22 April 2014:</b> The course has been split into two parts, C++ Grandmaster I and C++ Grandmaster II.  C++ Grandmaster I will also include a final written assignment on the C++ language specification.  This about page has not been updated with these changes as yet.</p>
+
+				<h2>Overview</h2>
+
+				<p>Students of this two part online course each single-handedly develop their own original C++
+					compiler, standard library, and toolchain with the following features:</p>
+
+				<ul>
+					<li>Compliant with the latest 2011 standard (C++11)</li>
+					<li>Written entirely in C++ with no third-party dependencies</li>
+					<li>Code generator targeting Linux x86_64</li>
+					<li>Full toolchain including preprocessor, compiler frontend/backend, assembler, 
+						linker and all standard library components</li>
+					<li>Builds with itself (self-hosting) and passes provided conformance
+						test suite</li>
+				</ul>
+
+				<h2>Prerequisites</h2>
+
+				<p>There are no hard prerequisites, however successful completion is unlikely if the student does not meet the following <b>minimum</b> initial requirements:</p>
+
+				<ul>
+					<li>2+ years experience working on a C++ codebase or similar
+						language (Java, C#, C)</li>
+					<li>taken a typical undergraduate <a
+						href="https://www.coursera.org/course/compilers">Compilers</a>
+						course
+					</li>
+					<li>read the <a
+						href="http://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools">dragon
+							book</a> or similar
+					</li>
+					<li>developed a compiler for a <a
+						href="http://en.wikipedia.org/wiki/Toy_language">toy language</a></li>
+					<li>coded and debugged at an assembly level</li>
+					<li>basic Unix/Linux experience</li>
+				</ul>
+
+				<p>Most students commence the course with advanced degrees in computer science, and hold challenging software engineering positions, usually with a focus on systems programming.</p>
+
+				<h2>Outcomes</h2>
+
+				<p>As a primary outcome the participant will demonstrate:</p>
+
+				<ul>
+					<li>a complete, exhaustive knowledge of the C++ language and
+						C++ standard library</li>
+				</ul>
+
+				<p>Secondary outcomes are:</p>
+
+				<ul>
+					<li>the ability to cope with large-scale software
+						implementation</li>
+					<li>an understanding of language design and compiler construction</li>
+					<li>a knowledge of Linux kernel-userspace interface and
+						operating system</li>
+					<li>Intel 64 assembly programming/debugging and computer
+						architecture experience</li>
+				</ul>
+
+				<h2>Rewards</h2>
+
+				<p>Course graduates will receive:</p>
+
+				<ul>
+					<li>the title <strong>Certified C++ Grandmaster [CPPGM]</strong></li>
+					<li>a certificate and letter of recommendation detailing their achievement</li>
+					<li>access to a course graduate exclusive professional
+						networking group</li>
+				</ul>
+
+				<h2>Course Structure</h2>
+
+				<p>The course is broken down into a linear series of programming assignments
+					that build upon one another.</p>
+
+				<p>Each assignment has an associated starter kit containing:</p>
+
+				<ul>
+					<li>skeleton code</li>
+					<li>design and reference documentation</li>
+					<li>a test suite</li>
+					<li>a support forum</li>
+					<li>a compiled reference implementation</li>
+				</ul>
+
+				<p>To complete an assignment, the participant submits their codebase for automated testing and review.</p>
+
+				<p>Upon completion of each assignment, access is granted to the next.</p>
+
+				<h2>References / Textbook</h2>
+
+				<ul>
+					<li><a
+						href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3485.pdf"><strong>Standard
+								for Programming Language C++ (pdf)</strong></a></li>
+					<li><a
+						href="http://www.amazon.com/Compilers-Principles-Techniques-Tools-Edition/dp/0321486811">Compilers:
+							Principles, Techniques, and Tools - Aho, Lam, Sethi, Ullman
+							(book)</a></li>
+					<li><a
+						href="http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html">Intel
+							64 and IA-32 Architectures Software Developer Manuals (pdf downloads)</a></li>
+					<li><a href="http://kernel.org/doc/">Linux Kernel
+							Documentation (html)</a></li>
+				</ul>
+				
+				
+								<h2>Frequently Asked Questions</h2>
+
+<ul>
+<li><a href="about.html#1">What is the C++ Grandmaster Certification?</a></li>
+<li><a href="about.html#2">How much does it cost?</a></li>
+<li><a href="about.html#3">When does it start?</a></li>
+<li><a href="about.html#4">How do I enroll?</a></li>
+<li><a href="about.html#5">Why should I take this course?</a></li>
+<li><a href="about.html#6">Is there a certificate?</a></li>
+<li><a href="about.html#7">Will we use C++11 (formerly known as C++0x)?</a></li>
+<li><a href="about.html#8">Isn't this a huge undertaking, usually done by an entire team of programmers?</a></li>
+<li><a href="about.html#9">Why Linux x86-64?</a></li>
+<li><a href="about.html#10">Can I use tool XXX or library XXX?</a></li>
+<li><a href="about.html#11">May I publish my code on my blog or website?</a></li>
+<li><a href="about.html#12">How is the course structured?</a></li>
+<li><a href="about.html#13">Are there deadlines?</a></li>
+<li><a href="about.html#14">What is the minimum workload to keep up with the deadlines?</a></li>
+<li><a href="about.html#15">Can I take the course alongside full-time work or study?</a></li>
+<li><a href="about.html#16">How many people are taking the course?</a></li>
+<li><a href="about.html#17">How long does the course take?</a></li>
+<li><a href="about.html#18">What exactly are the programming assignments like?</a></li>
+<li><a href="about.html#19">Who is the course instructor?</a></li>
+
+</ul>
+			
+<h2 id="1">What is the C++ Grandmaster Certification?</h2>
+
+<p>The C++ Grandmaster Certification is an online course in which each student single-handedly develops their own complete standalone C++ toolchain - including a preprocessor, compiler frontend/backend, assembler, linker, and full hosted implementation of the C++ standard library.</p>
+
+<p>The toolchain will produce executable applications for a target of (a) the Linux operating system, and (b) the x86-64 (Intel 64 / AMD 64) computer architecture ABI.</p>
+
+<p>The toolchain is developed piece by piece as a series of programming assignments.</p>
+
+<p>In the end, all parts of the toolchain have been written by the student, and as a grand finale, the student builds the toolchain with itself (a self-hosting build) and passes final system testing.  Apart from a bootstrapping compiler and a small amount of skeleton code to harness the provided test suites, no third-party tools or libraries are used.</p>
+
+<h2 id="2">How much does it cost?</h2>
+
+<p>The first and current run of the course is free.  Tuition costs for the next run, if any, have not been announced.</p>
+
+<h2 id="3">When does it start?</h2>
+
+<p>Enrollments are closed for the current run of the course.  When the next run starts has not been announced yet.</p>
+
+<h2 id="4">How do I enroll?</h2>
+
+<p>Enrollments are currently closed.  If you would like to receive an email notification when enrollments reopen you can <a href="preregister.html">preregister</a> by signing up to our public announcement mailing list <a href="preregister.html">cppgm-announce</a></p>
+
+<h2 id="5">Why should I take this course?</h2>
+
+<p>The main benefit of this course is a complete (and verified) knowledge of the C++ programming language and the C++ standard library.  The certification provided by this course is the most rigorous language-specific C++ qualification possible.</p>
+
+<p>Another benefit is the experience of implementing solo quite a large C++ software engineering project from a detailed specification.  Notice that you are not only implementing the C++ standard, but are also applying C++ (at scale) to do so.</p>
+
+<p>In addition, you will learn a lot about the Linux operating system, in particular the userspace-kernel interface (syscalls, ABI, execve loader, ELF).  This is useful to understand operating systems in general, and also useful for optimizing applications on Linux.</p>
+
+<p>You will also learn x86-64 assembly.  This is useful for optimization as well, but mostly it will give you the ability to fearlessly "drop to disassembly" when debugging x86 applications.</p>
+
+<p>Finally, you will acquire a practical view of compiler construction with a real world language targeting a real world platform.</p>
+
+<h2 id="6">Is there a certificate?</h2>
+
+<p>Yes, we provide graduates with both a physical and electronic certificate and a detailed letter of recommendation that you can add to your resume/CV that describes in concrete detail what you have achieved in this course and what it means regarding your capabilities and skillset as a programmer.</p>
+
+<p>You will also earn the title <b>Certified C++ Grandmaster [CPPGM]</b>.</p>
+
+<p>Finally, graduates will get access to an exclusive online professional networking group where they can mingle with other gradautes of the course, to socialize, exchange career opportunities or make invitations/introductions.</p>
+
+<h2 id="7">Will we use C++11 (formerly known as C++0x)?</h2>
+
+<p>Yes, the course targets the most recent working draft of the standard at commencement of a run, which for the first run was the post-C++11 N3485.  The developed toolchain will support all the latest C++ language and library features, and participants may use any of the latest C++ features (provided they are also supported by the bootstrap toolchain) in its construction.  One of the main benefits of the course is learning about the very latest C++ features and how they work in detail.</p>
+
+<h2 id="8">Isn't this a huge undertaking, usually done by an entire team of programmers?</h2>
+
+<p>Yes, earning the title Certified C++ Grandmaster is for most programmers the hardest programming exercise they have completed in their careers.  It requires writing well over 100,000 lines of code, implementing about 2000 pages of dense technical specifications and takes over 1000 hours of intense work for that small percentage of world-class programmers that are ready to complete it at all.</p>
+
+<h2 id="9">Why Linux x86-64?</h2>
+
+<p>For simplicity, we wanted the backend to target a single set operating system and architecture.  We only considered targets that have an open source operating system, so we could freely step into the kernel as needed.  Beyond that, we simply selected the most popular "real world" commodity architecture so the incidental concrete knowledge would have the highest chance of being useful.</p>
+
+<h2 id="10">Can I use tool XXX or library XXX?</h2>
+
+<p>The main test of the certification is that you are able to write all the parts of the toolchain, and have them work together.  In the end, the entire codebase must be your own original work.  Therefore you may not use any third party tools or libraries, except those explicitly authorized for bootstrapping and testing purposes.</p>
+
+<h2 id="11">May I publish my code on my blog or website?</h2>
+
+<p>As a condition of taking the course or using our course materials, we require that you agree to our <a href="honorcode.html">Honor Code</a>.  Among the conditions are that you will not release your source code without our written permission.  The reason for this is to not create a temptation of plagarism.  For the integrity of the qualification, it is necessary for us to certify that the code you submit is your own original work.  If we allowed students to post their assignment solutions to GitHub it would make this task impossible.  There are a number of features expected of a production C++ toolchain beyond standard-compliance, and so your assignment solutions will not have commercial value as-is.  Clang/LLVM source is freely available for use in both open source and commercial applications, is highly modular, supports multiple frontend and backend languages with an advanced IMF for optimization, refactoring, debugging, dynamic linking, many extensions.  Your assignment solutions will not be competetive with it as-is, or other production toolchains.  In the event you want to use the code you write for this course as part of a real world application, we ask you to contact us so that we can decide if it qualifies for permission.  You may however freely distribute programs without source code in object form without permission.  Also note, we agree to not use your source code for any purpose other than grading and certification without your permission.</p>
+
+<h2 id="12">How is the course structured?</h2>
+
+<p>The process of creating the toolchain is broken down into a series of programming assignments.  Each assignment has a starter kit that contains design and reference documentation, skeleton code that is attached to a test harness, a test suite and a compiled reference implementation.  It is then your job to implement the described component and add it to your toolchain.  Once it passes the test suite locally, you push your assignment solution to the cppgm site through a private git repository each student has provisioned at the start of the course.  Automated testing is executed on it; if that passes it goes up for review and some security checks for plagiarism against past submissions and publicly accessible open source compilers.  Once these steps are completed successfully your account will be promoted, and you will be given the next assignment.</p>
+
+<p>This process continues until the final assignment.  The final assignment involves building all of the components with themselves to produce a standalone self-hosted toolchain, independant of the bootstrap toolchain.  Your standalone toolchain is then tested against the a full conformance test suite.  Once this final assignment is passed, you have graduated from the course and have become a Certified C++ Grandmaster.</p>
+
+<h2 id="13">Are there deadlines?</h2>
+
+<p>Yes.  Each programming assignment has a deadline by which the latest submission is accepted.  Students that fail to pass an assignment by a deadline are automatically expelled.  A long gap is given between when an assignment is posted and the deadline for that assignment, so the schedule remains flexible.</p>
+
+<h2 id="14">What is the minimum workload to keep up with the deadlines?</h2>
+
+<p>Productivity varies enormously between programmers depending on background and talent, so it is different for everybody.  With that caveat in mind: for a good programmer, that meets the listed prerequisites, and is really "ready" for the course, the minimum workload is 10 hours/week.</p>
+
+<h2 id="15">Can I take this course alongside full-time work or study?</h2>
+
+<p>Yes, but it is advisable to get permission to spend at least 1 day/week on the course (as your "20% project").  Together with a little time on the weekend and at night you should be able to keep up.</p>
+
+<h2 id="16">How many people are taking the course?</h2>
+
+<p>For the first run 10,000 programmers enrolled and started on the first assignment.  It is expected less than 1% of them will go on to successfully complete the course.</p>
+
+<h2 id="18">What exactly are the programming assignments like?</h2>
+
+<p>You can view <a href="pa1.html">Programming Assignment 1</a> as a preview.  You can go ahead and dive in right now and try it out.  The different parts of the toolchain and standard library each have their own unique challenges, and PA1 is considered an easy warmup exercise, but it should give you some idea what the course is like.</p>
+
+			</div>
+
+
+			<div id="right">
+				<div id="nav">
+					<img src="img/cppgm.png" alt="logos"></img>
+					<h3>Current Class Running</h3>
+					<h3>Enrollments Closed</h3>
+					<h3>Next Class Starts: TBD</h3>
+					<h3><a href="preregister.html">Pre-Register Now</a></h3>
+				</div>
+				<!--
+				<div class="box">
+					<div class="boxinset">
+						<form action="enroll" method="POST" onsubmit="return submit_enrollment(this);" >
+							<table style="width: 100%">
+								<tr>
+									<td><b>First Name:</b></td>
+									<td><input style="width: 100%" type="text" name="first_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Last Name:</b></td>
+									<td><input style="width: 100%" type="text" name="last_name"></input></td>
+								</tr>
+								<tr>
+									<td><b>Email:</b></td>
+									<td><input style="width: 100%" type="text" name="email_address"></input></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td align="right"><input
+										style="background-color: #a2c134; color: #303030; font-size: 18px;"
+										type="submit" id="enroll_button" value="Enroll In Class"></input></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				-->
+
+				<img style="margin-top: 20px;" src="img/toolchain-architecture.gif" alt="architecture diagram"></img>
+				
+				<div id="nav">
+				<h3>C++ Standard Library</h3>
+				<table>
+				<tr><td style="padding:10px">
+				<ul>
+				<li>Language Support</li>
+				<li>Diagnostics</li>
+				<li>General Utilities</li>
+				<li>Strings</li>
+				<li>Localization</li>
+				<li>Containers</li>
+				<li>Iterators</li>
+				</ul>
+				</td><td style="padding:10px">
+				<ul>
+				<li>Algorithms</li>
+				<li>Numerics</li>
+				<li>Input/Ouput</li>
+				<li>Regular Expressions</li>
+				<li>Atomics</li>
+				<li>Thread Support</li>
+				<li>C Library</li>
+				</ul>
+				
+				</td></tr>
+				</table>
+				</div>
+			</div>
+			<div id="clear"></div>
+		</div>
+		<div id="footer">
+			<p>
+				&copy; 2013 CPPGM Foundation - <a href="http://www.cppgm.org">www.cppgm.org</a>.
+			</p>
+		</div>
+	</div>
+</body>
+</html>
